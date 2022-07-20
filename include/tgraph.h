@@ -9,6 +9,8 @@
 #ifndef TGRAPH_TGRAPH_H
 #define TGRAPH_TGRAPH_H
 
+#define TG_DEBUG
+
 #include <vector>
 
 #include "parser.h"
@@ -32,8 +34,8 @@ class TGraph {
   TGraph();
   void setup();
   void draw();
-  void parseEquation(std::string equation);
-  int simulateEquation(std::vector<int> ops, int x);
+  void parseEquation(std::string& equation);
+  int simulateEquation(std::vector<int>& ops, int x);
 };
 
 #endif

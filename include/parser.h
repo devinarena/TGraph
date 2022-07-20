@@ -18,8 +18,9 @@ class Parser {
  private:
  public:
   Parser();
-  std::vector<int> parse(std::string equation);
-  void printOPs(std::vector<int> ops);
+  std::vector<int> parse(std::string& equation);
+  void printOPs(std::vector<int>& ops);
+  int printOP(std::vector<int>& ops, int op);
 };
 
 #endif

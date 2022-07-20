@@ -28,62 +28,81 @@ void TGraph::setup() {
   screen = std::vector(screenHeight, std::vector(screenWidth, false));
 }
 
-void TGraph::parseEquation(std::string equation) {
+void TGraph::parseEquation(std::string& equation) {
   ops = parser.parse(equation);
+#ifdef TG_DEBUG
   parser.printOPs(ops);
-  std::cout << simulateEquation(ops, 1);
+#endif
+  for (int i = 0; i <= 10; i++)
+    std::cout << simulateEquation(ops, i) << "\n";
 }
 
-int TGraph::simulateEquation(std::vector<int> ops, int x) {
+int TGraph::simulateEquation(std::vector<int>& ops, int x) {
+  // x * 2 - 1
+  // x 2 1
+  // * -
 #undef CONST
   std::stack<int> nums;
   for (size_t i = 0; i < ops.size(); i++) {
-    switch(ops[i]) {
-        case +OP::CONST: {
-            nums.push(ops[++i]);
-            break;
-        }
-        case +OP::VAR: {
-            nums.push(x);
-            break;
-        }
-        case +OP::CVAR: {
-            break;
-        }
-        case +OP::ADD: {
-            int a = nums.top();
-            nums.pop();
-            int b = nums.top();
-            nums.pop();
-            nums.push(a + b);
-            break;
-        }
-        case +OP::SUB: {
-            int a = nums.top();
-            nums.pop();
-            int b = nums.top();
-            nums.pop();
-            nums.push(b - a);
-            break;
-        }
-        case +OP::MUL: {
-            int a = nums.top();
-            nums.pop();
-            int b = nums.top();
-            nums.pop();
-            nums.push(a * b);
-            break;
-        }
-        case +OP::DIV: {
-            int a = nums.top();
-            nums.pop();
-            int b = nums.top();
-            nums.pop();
-            nums.push(b / a);
-            break;
-        }
+    switch (ops[i]) {
+      case +OP::CONST: {
+        nums.push(ops[++i]);
+        break;
+      }
+      case +OP::VAR: {
+        nums.push(x);
+        break;
+      }
+      case +OP::CVAR: {
+        break;
+      }
+      case +OP::ADD: {
+        int a = nums.top();
+        nums.pop();
+        int b = nums.top();
+        nums.pop();
+        nums.push(a + b);
+        break;
+      }
+      case +OP::SUB: {
+        int a = nums.top();
+        nums.pop();
+        int b = nums.top();
+        nums.pop();
+        nums.push(b - a);
+        break;
+      }
+      case +OP::MUL: {
+        int a = nums.top();
+        nums.pop();
+        int b = nums.top();
+        nums.pop();
+        nums.push(a * b);
+        break;
+      }
+      case +OP::DIV: {
+        int a = nums.top();
+        nums.pop();
+        int b = nums.top();
+        nums.pop();
+        nums.push(b / a);
+        break;
+      }
     }
-#define CONST const
+#ifdef TG_DEBUG
+    parser.printOP(ops, i);
+    std::vector<int> temp;
+    while (!nums.empty()) {
+      temp.push_back(nums.top());
+      nums.pop();
+    }
+    for (int i = temp.size() - 1; i >= 0; i--) {
+      std::cout << "[" << temp[i] << "]";
+      nums.push(temp[i]);
+    }
+    std::cout << "\n";
+#endif
   }
   return nums.top();
+#define CONST const
 }

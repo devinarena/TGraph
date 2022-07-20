@@ -17,12 +17,11 @@
 
 int main(int argc, char** argv) {
   if (argc == 1) {
-  } else if (argc == 1) {
     TGraph tG;
   } else {
     std::string equation{""};
     for (int i = 1; i < argc; i++) {
-      if (strcmp(argv[1], "-info") == 0) {
+      if (strcmp(argv[i], "-info") == 0) {
         std::cout << "TGraph v" << VERSION_MAJOR << "." << VERSION_MINOR
                   << "\n";
         std::cout << "Created by Devin Arena\n";
