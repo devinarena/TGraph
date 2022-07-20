@@ -15,7 +15,7 @@
 
 #include "parser.h"
 
-enum class OP { VAR, CVAR, CONST, ADD, SUB, MUL, DIV };
+enum class OP { VAR, CONST, NEG, ADD, SUB, MUL, DIV, END };
 template <typename T>
 constexpr auto operator+(T e) noexcept
     -> std::enable_if_t<std::is_enum<T>::value, std::underlying_type_t<T>> {
@@ -29,6 +29,7 @@ class TGraph {
   std::vector<std::vector<bool>> screen;
   std::vector<int> ops;
   Parser parser;
+  Scanner scanner;
 
  public:
   TGraph();

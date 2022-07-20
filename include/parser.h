@@ -12,13 +12,46 @@
 #include <string>
 #include <vector>
 
+#include "./scanner.h"
+
 enum class OP;
 
+enum class Precedence {
+  NONE,
+  ADD_SUB,
+  MUL_DIV,
+  UNARY,
+};
+
+class Parser;
+
+struct ParseRule {
+  void (Parser::*prefix)(void);
+  void (Parser::*infix)(void);
+  Precedence precedence;
+};
+
 class Parser {
+  typedef Parser* (*ParserFunc)(void);
+
  private:
+  std::vector<int> ops;
+  std::vector<int> tokens;
+  size_t tindex;
+  struct ParseRule parseRules[(int)Token::END];
+  Precedence getPrecedence(Token token);
+  void parsePrecedence(Precedence precedence);
+  void expression();
+  void unary();
+  void binary();
+  void variable();
+  void literal();
+  Token currentToken();
+  Token prevToken();
+
  public:
   Parser();
-  std::vector<int> parse(std::string& equation);
+  std::vector<int> parse(std::vector<int>& tokens);
   void printOPs(std::vector<int>& ops);
   int printOP(std::vector<int>& ops, int op);
 };

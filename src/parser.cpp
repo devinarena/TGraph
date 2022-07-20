@@ -12,135 +12,119 @@
 #include <iostream>
 #include <stack>
 
-Parser::Parser() {}
+Parser::Parser() : tindex(0) {
+  parseRules[+Token::VAR] =
+      (ParseRule){.prefix = &variable, .precedence = Precedence::NONE};
+  parseRules[+Token::CONST] =
+      (ParseRule){.prefix = &literal, .precedence = Precedence::NONE};
+  parseRules[+Token::ADD] =
+      (ParseRule){.infix = &binary, .precedence = Precedence::ADD_SUB};
+  parseRules[+Token::SUB] = (ParseRule){
+      .prefix = &unary, .infix = &binary, .precedence = Precedence::ADD_SUB};
+  parseRules[+Token::MUL] =
+      (ParseRule){.infix = &binary, .precedence = Precedence::MUL_DIV};
+  parseRules[+Token::DIV] =
+      (ParseRule){.infix = &binary, .precedence = Precedence::MUL_DIV};
+}
 
-static int getPrecedence(std::string& op) {
-  if (op.compare("+") == 0) {
-    return 1;
-  } else if (op.compare("-") == 0) {
-    return 1;
-  } else if (op.compare("*") == 0) {
-    return 2;
-  } else if (op.compare("/") == 0) {
-    return 2;
-  } else if (op.compare("^") == 0) {
-    return 3;
-  } else {
-    return 0;
+Precedence Parser::getPrecedence(Token token) {
+  if (token == Token::ADD || token == Token::SUB) {
+    return Precedence::ADD_SUB;
+  } else if (token == Token::MUL || token == Token::DIV) {
+    return Precedence::MUL_DIV;
+  }
+  return Precedence::NONE;
+}
+
+Token Parser::currentToken() {
+  if (tindex >= tokens.size()) {
+    return Token::NONE;
+  }
+  return (Token)tokens[tindex];
+}
+
+Token Parser::prevToken() {
+  if (tindex == 0)
+    return Token::NONE;
+  return (Token)tokens[tindex - 1];
+}
+
+void Parser::binary() {
+  Token op = prevToken();
+
+  parsePrecedence((Precedence)(+getPrecedence(op) + 1));
+
+  switch (op) {
+    case Token::ADD:
+      ops.push_back(+OP::ADD);
+      break;
+    case Token::SUB:
+      ops.push_back(+OP::SUB);
+      break;
+    case Token::MUL:
+      ops.push_back(+OP::MUL);
+      break;
+    case Token::DIV:
+      ops.push_back(+OP::DIV);
+      break;
+    default:
+      std::cerr << "Error: Invalid binary operator\n";
+      break;
   }
 }
 
-static void parsePrecedence(int precedence) {
-    
+void Parser::unary() {
+  Token op = prevToken();
+
+  parsePrecedence(Precedence::UNARY);
+
+  switch (op) {
+    case Token::SUB:
+      ops.push_back(+OP::NEG);
+      break;
+    default:
+      std::cerr << "Invalid unary operator: " << +op << "\n";
+      break;
+  }
 }
 
-std::vector<int> Parser::parse(std::string& equation) {
-//   // for possibly adding words I need to consider strings not just characters.
-//   std::stack<std::string> operators;
-//   std::stack<std::string> operands;
-//   std::vector<int> ops;
+void Parser::literal() {
+  ops.push_back(+OP::CONST);
+  ops.push_back(tokens[tindex]);
+  tindex++;
+}
 
-//   size_t start = 0;
+void Parser::variable() {
+  ops.push_back(+OP::VAR);
+}
 
-//   for (size_t i = 0; i < equation.length(); i++) {
-//     if (equation[i] == ' ') {
-//       if ((i - start) == 0) {
-//         start = i + 1;
-//         continue;
-//       }
-//       std::string token = equation.substr(start, i - start);
-//       if (token.length() == 1) {
-//         if (token[0] == '+' || token[0] == '-' || token[0] == '*' ||
-//             token[0] == '/') {
-//           if (operators.empty()) {
-//             operators.push(token);
-//           } else {
-//             std::string& top = operators.top();
-//             if (getPrecedence(top) > getPrecedence(token)) {
-//               operators.pop();
-//               operators.push(token);
-//               operators.push(top);
-//               std::string& a = operands.top();
-//               operands.pop();
-//               std::string& b = operands.top();
-//               operands.pop();
-//               operands.push(a);
-//               operands.push(b);
-//             } else
-//               operators.push(token);
-//           }
-//           start = i + 1;
-//           continue;
-//         }
-//       }
-//       operands.push(token);
-//       start = i + 1;
-//     }
-//   }
+void Parser::parsePrecedence(Precedence precedence) {
+  ParseRule rule = parseRules[+currentToken()];
+  tindex++;
+  if (rule.prefix == nullptr) {
+    std::cerr << "Expected expression.\n";
+    exit(1);
+  }
 
-//   // 1 + x + 2
-//   // 1 x 2
-//   // + +
+  (this->*rule.prefix)();
 
-//   while (!operators.empty()) {
-//     std::string& op = operators.top();
-//     if (op[0] == '+' || op[0] == '-' || op[0] == '*' || op[0] == '/') {
-//       std::string& a = operands.top();
-//       operands.pop();
-//       std::string& b = operands.top();
-//       operands.pop();
-//       if (b[0] == 'x' || b.compare("cx") == 0) {
-//         ops.push_back(b[0] == 'x' ? +OP::VAR : +OP::CVAR);
-//         if (a[0] != 'x' && a.compare("cx") != 0) {
-//           ops.push_back(+OP::CONST);
-//           ops.push_back(std::stoi(a));
-//           operands.push("cx");
-//         } else {
-//           ops.push_back(a[0] == 'x' ? +OP::VAR : +OP::CVAR);
-//           if (b[0] == 'x' && a[0] == 'x')
-//             operands.push("x");
-//           else {
-//             operands.push("cx");
-//           }
-//         }
-//       } else {
-//         ops.push_back(+OP::CONST);
-//         ops.push_back(std::stoi(b));
-//         if (a[0] != 'x' && a.compare("cx") != 0) {
-//           ops.push_back(+OP::CONST);
-//           ops.push_back(std::stoi(a));
-//           operands.push("cx");
-//         } else {
-//           ops.push_back(a[0] == 'x' ? +OP::VAR : +OP::CVAR);
-//           operands.push("cx");
-//         }
-//       }
-//       if (op == "+")
-//         ops.push_back(+OP::ADD);
-//       else if (op == "-")
-//         ops.push_back(+OP::SUB);
-//       else if (op == "*")
-//         ops.push_back(+OP::MUL);
-//       else if (op == "/")
-//         ops.push_back(+OP::DIV);
-//     }
-//     operators.pop();
-//   }
+  while (tindex < tokens.size() &&
+         precedence <= getPrecedence(currentToken())) {
+    rule = parseRules[+currentToken()];
+    tindex++;
+    if (rule.infix != nullptr)
+      (this->*rule.infix)();
+  }
+}
 
-//   while (!operands.empty()) {
-//     std::string& op = operands.top();
-//     if (op[0] == 'x') {
-//       ops.push_back(+OP::VAR);
-//     } else if (op.compare("cx") == 0) {
-//       ops.push_back(+OP::CVAR);
-//     } else {
-//       ops.push_back(+OP::CONST);
-//       ops.push_back(std::stoi(op));
-//     }
-//     operands.pop();
-//   }
+void Parser::expression() {
+  parsePrecedence(Precedence::NONE);
+}
 
-//   return ops;
+std::vector<int> Parser::parse(std::vector<int>& tokens) {
+  this->tokens = tokens;
+  expression();
+  return ops;
 }
 
 void Parser::printOPs(std::vector<int>& ops) {
@@ -154,8 +138,8 @@ int Parser::printOP(std::vector<int>& ops, int idx) {
   if (op == +OP::VAR) {
     std::cout << "VAR\n";
     return idx + 1;
-  } else if (op == +OP::CVAR) {
-    std::cout << "CVAR\n";
+  } else if (op == +OP::NEG) {
+    std::cout << "NEG\n";
     return idx + 1;
   } else if (op == +OP::ADD) {
     std::cout << "ADD\n";

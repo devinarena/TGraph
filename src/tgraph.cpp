@@ -29,7 +29,8 @@ void TGraph::setup() {
 }
 
 void TGraph::parseEquation(std::string& equation) {
-  ops = parser.parse(equation);
+  std::vector<int> tokens = scanner.scan(equation);
+  ops = parser.parse(tokens);
 #ifdef TG_DEBUG
   parser.printOPs(ops);
 #endif
@@ -43,7 +44,9 @@ int TGraph::simulateEquation(std::vector<int>& ops, int x) {
   // * -
 #undef CONST
   std::stack<int> nums;
+  int start = 0;
   for (size_t i = 0; i < ops.size(); i++) {
+    start = i;
     switch (ops[i]) {
       case +OP::CONST: {
         nums.push(ops[++i]);
@@ -53,7 +56,10 @@ int TGraph::simulateEquation(std::vector<int>& ops, int x) {
         nums.push(x);
         break;
       }
-      case +OP::CVAR: {
+      case +OP::NEG: {
+        int num = nums.top();
+        nums.pop();
+        nums.push(-num);
         break;
       }
       case +OP::ADD: {
@@ -90,7 +96,7 @@ int TGraph::simulateEquation(std::vector<int>& ops, int x) {
       }
     }
 #ifdef TG_DEBUG
-    parser.printOP(ops, i);
+    parser.printOP(ops, start);
     std::vector<int> temp;
     while (!nums.empty()) {
       temp.push_back(nums.top());
