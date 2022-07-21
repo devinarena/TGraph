@@ -25,6 +25,7 @@ enum class Precedence {
 };
 
 class Parser;
+union Operand;
 
 struct ParseRule {
   void (Parser::*prefix)(void);
@@ -36,11 +37,10 @@ class Parser {
   typedef Parser* (*ParserFunc)(void);
 
  private:
-  std::vector<int> ops;
-  std::vector<int> tokens;
+  std::vector<Operand> ops;
+  std::vector<Token> tokens;
   size_t tindex;
-  struct ParseRule parseRules[(int)Token::END];
-  Precedence getPrecedence(Token token);
+  struct ParseRule parseRules[(int)TType::END];
   void parsePrecedence(Precedence precedence);
   void expression();
   void grouping();
@@ -53,9 +53,9 @@ class Parser {
 
  public:
   Parser();
-  std::vector<int> parse(std::vector<int>& tokens);
-  void printOPs(std::vector<int>& ops);
-  int printOP(std::vector<int>& ops, int op);
+  std::vector<Operand> parse(std::vector<Token>& tokens);
+  void printOPs(std::vector<Operand>& ops);
+  int printOP(std::vector<Operand>& ops, int op);
 };
 
 #endif

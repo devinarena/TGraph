@@ -12,9 +12,12 @@
 #include <string>
 #include <vector>
 
+#define TOKEN(t) ((Token){.type = t})
+#define VALUE_TOKEN(v) ((Token){.value = v})
+
 enum class OP;
 
-enum class Token {
+enum class TType {
   NONE,
   VAR,
   CONST,
@@ -28,13 +31,16 @@ enum class Token {
   END
 };
 
+union Token {
+  TType type;
+  double value;
+};
+
 class Scanner {
  private:
-  std::vector<int> tokens;
-
  public:
   Scanner();
-  std::vector<int> scan(std::string& equation);
+  std::vector<Token> scan(std::string& equation);
 };
 
 #endif

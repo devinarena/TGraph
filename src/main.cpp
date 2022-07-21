@@ -20,7 +20,16 @@ int main(int argc, char** argv) {
     TGraph tG;
   } else {
     std::string equation{""};
+    TGraph tG;
+    char curr = 'a' + (23 + tG.getGraphed()) % 26;
     for (int i = 1; i < argc; i++) {
+      if (strcmp(argv[i], "and") == 0) {
+        tG.parseEquation(equation);
+        tG.computePoints(curr);
+        curr = 'a' + (23 + tG.getGraphed()) % 26;
+        equation = "";
+        continue;
+      }
       if (strcmp(argv[i], "-info") == 0) {
         std::cout << "TGraph v" << VERSION_MAJOR << "." << VERSION_MINOR
                   << "\n";
@@ -32,9 +41,10 @@ int main(int argc, char** argv) {
       equation.append(argv[i]);
       equation.append(" ");
     }
-    TGraph tG;
-    tG.parseEquation(equation);
-    tG.computePoints();
+    if (equation.length() > 0) {
+      tG.parseEquation(equation);
+      tG.computePoints(curr);
+    }
     tG.draw();
   }
   return 0;

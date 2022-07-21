@@ -16,25 +16,26 @@
 #include <vector>
 
 TGraph::TGraph() {
-  setup();
+  setupWindow();
 }
 
-void TGraph::setup() {
+void TGraph::setupWindow() {
   CONSOLE_SCREEN_BUFFER_INFO csbi;
 
   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
   screenWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
   screenHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 
-  screen = std::vector(screenHeight, std::vector(screenWidth, false));
+  screen = std::vector(screenHeight, std::vector(screenWidth, ' '));
 }
 
 void TGraph::draw() {
   system("cls");
+  std::cout << std::endl;
   for (int j = 0; j < screenHeight; j++) {
     for (int i = 0; i < screenWidth; i++) {
-      if (screen[j][i]) {
-        std::cout << "x";
+      if (screen[j][i] != ' ') {
+        std::cout << screen[j][i];
       } else {
         int x = i - screenWidth / 2;
         int y = screenHeight / 2 - j;
@@ -55,62 +56,64 @@ void TGraph::draw() {
 }
 
 void TGraph::parseEquation(std::string& equation) {
-  std::vector<int> tokens = scanner.scan(equation);
+  std::vector<Token> tokens = scanner.scan(equation);
+  ops.erase(ops.begin(), ops.end());
   ops = parser.parse(tokens);
+  graphed++;
 #ifdef TG_DEBUG
   parser.printOPs(ops);
 #endif
 }
 
-int TGraph::simulateEquation(int x) {
+int TGraph::simulateEquation(double x) {
 #undef CONST
-  std::stack<int> nums;
+  std::stack<double> nums;
   int start = 0;
   for (size_t i = 0; i < ops.size(); i++) {
     start = i;
-    switch (ops[i]) {
-      case +OP::CONST: {
-        nums.push(ops[++i]);
+    switch (ops[i].opcode) {
+      case OP::CONST: {
+        nums.push(ops[++i].value);
         break;
       }
-      case +OP::VAR: {
+      case OP::VAR: {
         nums.push(x);
         break;
       }
-      case +OP::NEG: {
-        int num = nums.top();
+      case OP::NEG: {
+        double num = nums.top();
         nums.pop();
         nums.push(-num);
         break;
       }
-      case +OP::ADD: {
-        int a = nums.top();
+      case OP::ADD: {
+        double a = nums.top();
         nums.pop();
-        int b = nums.top();
+        double b = nums.top();
         nums.pop();
         nums.push(a + b);
         break;
       }
-      case +OP::SUB: {
-        int a = nums.top();
+      case OP::SUB: {
+        double a = nums.top();
         nums.pop();
-        int b = nums.top();
+        double b = nums.top();
         nums.pop();
         nums.push(b - a);
         break;
       }
-      case +OP::MUL: {
-        int a = nums.top();
+      case OP::MUL: {
+        double a = nums.top();
         nums.pop();
-        int b = nums.top();
+        double b = nums.top();
         nums.pop();
         nums.push(a * b);
         break;
       }
-      case +OP::DIV: {
-        int a = nums.top();
+      case OP::DIV: {
+        double a = nums.top();
         nums.pop();
-        int b = nums.top();
+        double b = nums.top();
         nums.pop();
         if (a == 0)
           nums.push(INT_MIN);
@@ -118,10 +121,10 @@ int TGraph::simulateEquation(int x) {
           nums.push(b / a);
         break;
       }
-      case +OP::POW: {
-        int a = nums.top();
+      case OP::POW: {
+        double a = nums.top();
         nums.pop();
-        int b = nums.top();
+        double b = nums.top();
         nums.pop();
         nums.push(std::pow(b, a));
         break;
@@ -129,7 +132,7 @@ int TGraph::simulateEquation(int x) {
     }
 #ifdef TG_DEBUG
     parser.printOP(ops, start);
-    std::vector<int> temp;
+    std::vector<double> temp;
     while (!nums.empty()) {
       temp.push_back(nums.top());
       nums.pop();
@@ -145,15 +148,18 @@ int TGraph::simulateEquation(int x) {
 #define CONST const
 }
 
-void TGraph::computePoints() {
+void TGraph::computePoints(char symbol) {
   for (int i = 0; i < screenWidth; i++) {
-    for (int j = 0; j < screenHeight; j++) {
-      screen[j][i] = false;
-    }
     int x = i - screenWidth / 2;
     int y = screenHeight / 2 - simulateEquation(x);
     if (y > 0 && y < screenHeight) {
-      screen[y][i] = true;
+      screen[y][i] = symbol;
     }
   }
+}
+
+// Getters and Setters
+
+int TGraph::getGraphed() const {
+  return graphed;
 }

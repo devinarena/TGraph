@@ -13,40 +13,40 @@
 #include <stack>
 
 Parser::Parser() : tindex(0) {
-  parseRules[+Token::VAR] =
+  parseRules[+TType::VAR] =
       (ParseRule){.prefix = &variable, .precedence = Precedence::NONE};
-  parseRules[+Token::CONST] =
+  parseRules[+TType::CONST] =
       (ParseRule){.prefix = &literal, .precedence = Precedence::NONE};
-  parseRules[+Token::ADD] =
+  parseRules[+TType::ADD] =
       (ParseRule){.infix = &binary, .precedence = Precedence::TERM};
-  parseRules[+Token::SUB] = (ParseRule){
+  parseRules[+TType::SUB] = (ParseRule){
       .prefix = &unary, .infix = &binary, .precedence = Precedence::TERM};
-  parseRules[+Token::MUL] =
+  parseRules[+TType::MUL] =
       (ParseRule){.infix = &binary, .precedence = Precedence::FACTOR};
-  parseRules[+Token::DIV] =
+  parseRules[+TType::DIV] =
       (ParseRule){.infix = &binary, .precedence = Precedence::FACTOR};
-  parseRules[+Token::POW] =
+  parseRules[+TType::POW] =
       (ParseRule){.infix = &binary, .precedence = Precedence::POWER};
-  parseRules[+Token::O_PAREN] =
+  parseRules[+TType::O_PAREN] =
       (ParseRule){.prefix = &grouping, .precedence = Precedence::NONE};
 }
 
 Token Parser::currentToken() {
   if (tindex >= tokens.size()) {
-    return Token::NONE;
+    return TOKEN(TType::NONE);
   }
-  return static_cast<Token>(tokens[tindex]);
+  return tokens[tindex];
 }
 
 Token Parser::prevToken() {
   if (tindex == 0)
-    return Token::NONE;
-  return static_cast<Token>(tokens[tindex - 1]);
+    return TOKEN(TType::NONE);
+  return tokens[tindex - 1];
 }
 
 void Parser::grouping() {
   expression();
-  if (currentToken() != Token::C_PAREN) {
+  if (currentToken().type != TType::C_PAREN) {
     throw std::runtime_error("Expected closing parenthesis.");
   }
   tindex++;
@@ -55,23 +55,23 @@ void Parser::grouping() {
 void Parser::binary() {
   Token op = prevToken();
 
-  parsePrecedence((Precedence)(+parseRules[+op].precedence + 1));
+  parsePrecedence((Precedence)(+parseRules[+op.type].precedence + 1));
 
-  switch (op) {
-    case Token::ADD:
-      ops.push_back(+OP::ADD);
+  switch (op.type) {
+    case TType::ADD:
+      ops.push_back(OPCODE(OP::ADD));
       break;
-    case Token::SUB:
-      ops.push_back(+OP::SUB);
+    case TType::SUB:
+      ops.push_back(OPCODE(OP::SUB));
       break;
-    case Token::MUL:
-      ops.push_back(+OP::MUL);
+    case TType::MUL:
+      ops.push_back(OPCODE(OP::MUL));
       break;
-    case Token::DIV:
-      ops.push_back(+OP::DIV);
+    case TType::DIV:
+      ops.push_back(OPCODE(OP::DIV));
       break;
-    case Token::POW:
-      ops.push_back(+OP::POW);
+    case TType::POW:
+      ops.push_back(OPCODE(OP::POW));
       break;
     default:
       std::cerr << "Error: Invalid binary operator\n";
@@ -84,28 +84,28 @@ void Parser::unary() {
 
   parsePrecedence(Precedence::UNARY);
 
-  switch (op) {
-    case Token::SUB:
-      ops.push_back(+OP::NEG);
+  switch (op.type) {
+    case TType::SUB:
+      ops.push_back(OPCODE(OP::NEG));
       break;
     default:
-      std::cerr << "Invalid unary operator: " << +op << "\n";
+      std::cerr << "Invalid unary operator: " << +op.type << "\n";
       break;
   }
 }
 
 void Parser::literal() {
-  ops.push_back(+OP::CONST);
-  ops.push_back(+currentToken());
+  ops.push_back(OPCODE(OP::CONST));
+  ops.push_back(VALUE(currentToken().value));
   tindex++;
 }
 
 void Parser::variable() {
-  ops.push_back(+OP::VAR);
+  ops.push_back(OPCODE(OP::VAR));
 }
 
 void Parser::parsePrecedence(Precedence precedence) {
-  ParseRule rule = parseRules[+currentToken()];
+  ParseRule rule = parseRules[+currentToken().type];
   tindex++;
   if (rule.prefix == NULL) {
     std::cerr << "Expected expression.\n";
@@ -115,8 +115,8 @@ void Parser::parsePrecedence(Precedence precedence) {
   (this->*rule.prefix)();
 
   while (tindex < tokens.size() &&
-         precedence <= parseRules[+currentToken()].precedence) {
-    rule = parseRules[+currentToken()];
+         precedence <= parseRules[+currentToken().type].precedence) {
+    rule = parseRules[+currentToken().type];
     tindex++;
     if (rule.infix != NULL)
       (this->*rule.infix)();
@@ -127,55 +127,57 @@ void Parser::expression() {
   parsePrecedence(Precedence::TERM);
 }
 
-std::vector<int> Parser::parse(std::vector<int>& tokens) {
+std::vector<Operand> Parser::parse(std::vector<Token>& tokens) {
   this->tokens = tokens;
+  ops.erase(ops.begin(), ops.end());
+  tindex = 0;
   expression();
   return ops;
 }
 
-void Parser::printOPs(std::vector<int>& ops) {
+void Parser::printOPs(std::vector<Operand>& ops) {
   for (size_t i = 0; i < ops.size();) {
     i = printOP(ops, i);
   }
 }
 
-int Parser::printOP(std::vector<int>& ops, int idx) {
-  int op = ops[idx];
+int Parser::printOP(std::vector<Operand>& ops, int idx) {
+  OP op = ops[idx].opcode;
   switch (op) {
-    case +OP::VAR: {
+    case OP::VAR: {
       std::cout << "VAR\n";
       return idx + 1;
     }
-    case +OP::NEG: {
+    case OP::NEG: {
       std::cout << "NEG\n";
       return idx + 1;
     }
-    case +OP::ADD: {
+    case OP::ADD: {
       std::cout << "ADD\n";
       return idx + 1;
     }
-    case +OP::SUB: {
+    case OP::SUB: {
       std::cout << "SUB\n";
       return idx + 1;
     }
-    case +OP::MUL: {
+    case OP::MUL: {
       std::cout << "MUL\n";
       return idx + 1;
     }
-    case +OP::DIV: {
+    case OP::DIV: {
       std::cout << "DIV\n";
       return idx + 1;
     }
-    case +OP::POW: {
+    case OP::POW: {
       std::cout << "POW\n";
       return idx + 1;
     }
-    case +OP::CONST: {
-      std::cout << "CONST (" << ops[idx + 1] << ")\n";
+    case OP::CONST: {
+      std::cout << "CONST (" << ops[idx + 1].value << ")\n";
       return idx + 2;
     }
     default:
-      std::cerr << "Unknown operation: " << op << "\n";
+      std::cerr << "Unknown operation: " << +op << "\n";
       exit(1);
   }
 }
