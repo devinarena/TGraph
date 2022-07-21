@@ -34,8 +34,20 @@ std::vector<int> Scanner::scan(std::string& equation) {
         tokens.push_back(+Token::MUL);
         continue;
       }
+      case '^': {
+        tokens.push_back(+Token::POW);
+        continue;
+      }
       case 'x': {
         tokens.push_back(+Token::VAR);
+        continue;
+      }
+      case '(': {
+        tokens.push_back(+Token::O_PAREN);
+        continue;
+      }
+      case ')': {
+        tokens.push_back(+Token::C_PAREN);
         continue;
       }
     }

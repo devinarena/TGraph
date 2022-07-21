@@ -18,8 +18,9 @@ enum class OP;
 
 enum class Precedence {
   NONE,
-  ADD_SUB,
-  MUL_DIV,
+  TERM,
+  FACTOR,
+  POWER,
   UNARY,
 };
 
@@ -42,8 +43,9 @@ class Parser {
   Precedence getPrecedence(Token token);
   void parsePrecedence(Precedence precedence);
   void expression();
-  void unary();
+  void grouping();
   void binary();
+  void unary();
   void variable();
   void literal();
   Token currentToken();

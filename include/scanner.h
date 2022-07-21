@@ -22,6 +22,9 @@ enum class Token {
   SUB,
   MUL,
   DIV,
+  POW,
+  O_PAREN,
+  C_PAREN,
   END
 };
 

@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <windows.h>
+#include <cmath>
 #include <iostream>
 #include <stack>
 #include <vector>
@@ -33,18 +34,20 @@ void TGraph::draw() {
   for (int j = 0; j < screenHeight; j++) {
     for (int i = 0; i < screenWidth; i++) {
       if (screen[j][i]) {
-        std::cout << "*";
+        std::cout << "x";
       } else {
         int x = i - screenWidth / 2;
         int y = screenHeight / 2 - j;
         if (x == 0 && y == 0)
-            std::cout << "O";
+          std::cout << "+";
+        else if (x == -1 && y == -1)
+          std::cout << "O";
         else if (x == 0)
-            std::cout << "|";
+          std::cout << "|";
         else if (y == 0)
-            std::cout << "-";
+          std::cout << "-";
         else
-            std::cout << " ";
+          std::cout << " ";
       }
     }
     std::cout << "\n";
@@ -109,7 +112,18 @@ int TGraph::simulateEquation(int x) {
         nums.pop();
         int b = nums.top();
         nums.pop();
-        nums.push(b / a);
+        if (a == 0)
+          nums.push(INT_MIN);
+        else
+          nums.push(b / a);
+        break;
+      }
+      case +OP::POW: {
+        int a = nums.top();
+        nums.pop();
+        int b = nums.top();
+        nums.pop();
+        nums.push(std::pow(b, a));
         break;
       }
     }

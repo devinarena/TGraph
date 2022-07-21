@@ -18,22 +18,17 @@ Parser::Parser() : tindex(0) {
   parseRules[+Token::CONST] =
       (ParseRule){.prefix = &literal, .precedence = Precedence::NONE};
   parseRules[+Token::ADD] =
-      (ParseRule){.infix = &binary, .precedence = Precedence::ADD_SUB};
+      (ParseRule){.infix = &binary, .precedence = Precedence::TERM};
   parseRules[+Token::SUB] = (ParseRule){
-      .prefix = &unary, .infix = &binary, .precedence = Precedence::ADD_SUB};
+      .prefix = &unary, .infix = &binary, .precedence = Precedence::TERM};
   parseRules[+Token::MUL] =
-      (ParseRule){.infix = &binary, .precedence = Precedence::MUL_DIV};
+      (ParseRule){.infix = &binary, .precedence = Precedence::FACTOR};
   parseRules[+Token::DIV] =
-      (ParseRule){.infix = &binary, .precedence = Precedence::MUL_DIV};
-}
-
-Precedence Parser::getPrecedence(Token token) {
-  if (token == Token::ADD || token == Token::SUB) {
-    return Precedence::ADD_SUB;
-  } else if (token == Token::MUL || token == Token::DIV) {
-    return Precedence::MUL_DIV;
-  }
-  return Precedence::NONE;
+      (ParseRule){.infix = &binary, .precedence = Precedence::FACTOR};
+  parseRules[+Token::POW] =
+      (ParseRule){.infix = &binary, .precedence = Precedence::POWER};
+  parseRules[+Token::O_PAREN] =
+      (ParseRule){.prefix = &grouping, .precedence = Precedence::NONE};
 }
 
 Token Parser::currentToken() {
@@ -49,10 +44,18 @@ Token Parser::prevToken() {
   return static_cast<Token>(tokens[tindex - 1]);
 }
 
+void Parser::grouping() {
+  expression();
+  if (currentToken() != Token::C_PAREN) {
+    throw std::runtime_error("Expected closing parenthesis.");
+  }
+  tindex++;
+}
+
 void Parser::binary() {
   Token op = prevToken();
 
-  parsePrecedence((Precedence)(+getPrecedence(op) + 1));
+  parsePrecedence((Precedence)(+parseRules[+op].precedence + 1));
 
   switch (op) {
     case Token::ADD:
@@ -66,6 +69,9 @@ void Parser::binary() {
       break;
     case Token::DIV:
       ops.push_back(+OP::DIV);
+      break;
+    case Token::POW:
+      ops.push_back(+OP::POW);
       break;
     default:
       std::cerr << "Error: Invalid binary operator\n";
@@ -109,7 +115,7 @@ void Parser::parsePrecedence(Precedence precedence) {
   (this->*rule.prefix)();
 
   while (tindex < tokens.size() &&
-         precedence <= getPrecedence(currentToken())) {
+         precedence <= parseRules[+currentToken()].precedence) {
     rule = parseRules[+currentToken()];
     tindex++;
     if (rule.infix != NULL)
@@ -118,7 +124,7 @@ void Parser::parsePrecedence(Precedence precedence) {
 }
 
 void Parser::expression() {
-  parsePrecedence(Precedence::NONE);
+  parsePrecedence(Precedence::TERM);
 }
 
 std::vector<int> Parser::parse(std::vector<int>& tokens) {
@@ -135,28 +141,41 @@ void Parser::printOPs(std::vector<int>& ops) {
 
 int Parser::printOP(std::vector<int>& ops, int idx) {
   int op = ops[idx];
-  if (op == +OP::VAR) {
-    std::cout << "VAR\n";
-    return idx + 1;
-  } else if (op == +OP::NEG) {
-    std::cout << "NEG\n";
-    return idx + 1;
-  } else if (op == +OP::ADD) {
-    std::cout << "ADD\n";
-    return idx + 1;
-  } else if (op == +OP::SUB) {
-    std::cout << "SUB\n";
-    return idx + 1;
-  } else if (op == +OP::MUL) {
-    std::cout << "MUL\n";
-    return idx + 1;
-  } else if (op == +OP::DIV) {
-    std::cout << "DIV\n";
-    return idx + 1;
-  } else if (op == +OP::CONST) {
-    std::cout << "CONST (" << ops[idx + 1] << ")\n";
-    return idx + 2;
+  switch (op) {
+    case +OP::VAR: {
+      std::cout << "VAR\n";
+      return idx + 1;
+    }
+    case +OP::NEG: {
+      std::cout << "NEG\n";
+      return idx + 1;
+    }
+    case +OP::ADD: {
+      std::cout << "ADD\n";
+      return idx + 1;
+    }
+    case +OP::SUB: {
+      std::cout << "SUB\n";
+      return idx + 1;
+    }
+    case +OP::MUL: {
+      std::cout << "MUL\n";
+      return idx + 1;
+    }
+    case +OP::DIV: {
+      std::cout << "DIV\n";
+      return idx + 1;
+    }
+    case +OP::POW: {
+      std::cout << "POW\n";
+      return idx + 1;
+    }
+    case +OP::CONST: {
+      std::cout << "CONST (" << ops[idx + 1] << ")\n";
+      return idx + 2;
+    }
+    default:
+      std::cerr << "Unknown operation: " << op << "\n";
+      exit(1);
   }
-  std::cerr << "Unknown operation: " << op << "\n";
-  exit(1);
 }

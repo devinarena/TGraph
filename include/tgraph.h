@@ -15,7 +15,7 @@
 
 #include "parser.h"
 
-enum class OP { VAR, CONST, NEG, ADD, SUB, MUL, DIV, END };
+enum class OP { VAR, CONST, NEG, ADD, SUB, MUL, DIV, POW,  END };
 template <typename T>
 constexpr auto operator+(T e) noexcept
     -> std::enable_if_t<std::is_enum<T>::value, std::underlying_type_t<T>> {
