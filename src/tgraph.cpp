@@ -29,6 +29,21 @@ void TGraph::setupWindow() {
   screen = std::vector(screenHeight, std::vector(screenWidth, ' '));
 }
 
+void TGraph::cli() {
+  draw();
+  std::string equation{""};
+  do {
+    char curr = 'a' + (23 + getGraphed()) % 26;
+    std::cout << "Enter an equation to graph: y = ";
+    std::getline(std::cin, equation);
+    if (equation.length() == 0)
+      break;
+    parseEquation(equation);
+    computePoints(curr);
+    draw();
+  } while (equation.length() > 0);
+}
+
 void TGraph::draw() {
   system("cls");
   std::cout << std::endl;
@@ -60,6 +75,13 @@ void TGraph::parseEquation(std::string& equation) {
   ops.erase(ops.begin(), ops.end());
   ops = parser.parse(tokens);
   graphed++;
+  screen[graphed][1] = 'y';
+  screen[graphed][2] = ' ';
+  screen[graphed][3] = '=';
+  screen[graphed][4] = ' ';
+  for (size_t i = 0; i < equation.length(); i++) {
+    screen[graphed][5 + i] = equation[i];
+  }
 #ifdef TG_DEBUG
   parser.printOPs(ops);
 #endif
@@ -127,6 +149,17 @@ int TGraph::simulateEquation(double x) {
         double b = nums.top();
         nums.pop();
         nums.push(std::pow(b, a));
+        break;
+      }
+      case OP::MAGIC: {
+        double a = nums.top();
+        nums.pop();
+        if (a > 0) {
+          nums.push(INT_MAX);
+        } else {
+          // INTEGRAL(e^-a^2t) = -1/a^2
+          nums.push(1 / std::pow(a, 2));
+        }
         break;
       }
     }

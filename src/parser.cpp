@@ -27,6 +27,8 @@ Parser::Parser() : tindex(0) {
       (ParseRule){.infix = &binary, .precedence = Precedence::FACTOR};
   parseRules[+TType::POW] =
       (ParseRule){.infix = &binary, .precedence = Precedence::POWER};
+  parseRules[+TType::MAGIC] =
+      (ParseRule){.prefix = &unary, .precedence = Precedence::UNARY};
   parseRules[+TType::O_PAREN] =
       (ParseRule){.prefix = &grouping, .precedence = Precedence::NONE};
 }
@@ -87,6 +89,9 @@ void Parser::unary() {
   switch (op.type) {
     case TType::SUB:
       ops.push_back(OPCODE(OP::NEG));
+      break;
+    case TType::MAGIC:
+      ops.push_back(OPCODE(OP::MAGIC));
       break;
     default:
       std::cerr << "Invalid unary operator: " << +op.type << "\n";
@@ -170,6 +175,10 @@ int Parser::printOP(std::vector<Operand>& ops, int idx) {
     }
     case OP::POW: {
       std::cout << "POW\n";
+      return idx + 1;
+    }
+    case OP::MAGIC: {
+      std::cout << "MAGIC\n";
       return idx + 1;
     }
     case OP::CONST: {

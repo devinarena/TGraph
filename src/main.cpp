@@ -18,6 +18,7 @@
 int main(int argc, char** argv) {
   if (argc == 1) {
     TGraph tG;
+    tG.cli();
   } else {
     std::string equation{""};
     TGraph tG;

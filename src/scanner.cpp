@@ -39,6 +39,10 @@ std::vector<Token> Scanner::scan(std::string& equation) {
         tokens.push_back(TOKEN(TType::POW));
         continue;
       }
+      case '~': {
+        tokens.push_back(TOKEN(TType::MAGIC));
+        continue;
+      }
       case 'x': {
         tokens.push_back(TOKEN(TType::VAR));
         continue;

@@ -26,6 +26,7 @@ enum class TType {
   MUL,
   DIV,
   POW,
+  MAGIC,
   O_PAREN,
   C_PAREN,
   END

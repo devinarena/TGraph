@@ -18,7 +18,7 @@
 #define OPCODE(op) ((Operand){.opcode = op})
 #define VALUE(val) ((Operand){.value = val})
 
-enum class OP { VAR, CONST, NEG, ADD, SUB, MUL, DIV, POW, END };
+enum class OP { VAR, CONST, NEG, ADD, SUB, MUL, DIV, POW, MAGIC, END };
 template <typename T>
 constexpr auto operator+(T e) noexcept
     -> std::enable_if_t<std::is_enum<T>::value, std::underlying_type_t<T>> {
@@ -43,6 +43,7 @@ class TGraph {
  public:
   TGraph();
   void setupWindow();
+  void cli();
   void draw();
   void parseEquation(std::string& equation);
   void computePoints(char symbol);
