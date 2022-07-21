@@ -40,13 +40,13 @@ Token Parser::currentToken() {
   if (tindex >= tokens.size()) {
     return Token::NONE;
   }
-  return (Token)tokens[tindex];
+  return static_cast<Token>(tokens[tindex]);
 }
 
 Token Parser::prevToken() {
   if (tindex == 0)
     return Token::NONE;
-  return (Token)tokens[tindex - 1];
+  return static_cast<Token>(tokens[tindex - 1]);
 }
 
 void Parser::binary() {
@@ -90,7 +90,7 @@ void Parser::unary() {
 
 void Parser::literal() {
   ops.push_back(+OP::CONST);
-  ops.push_back(tokens[tindex]);
+  ops.push_back(+currentToken());
   tindex++;
 }
 
@@ -101,7 +101,7 @@ void Parser::variable() {
 void Parser::parsePrecedence(Precedence precedence) {
   ParseRule rule = parseRules[+currentToken()];
   tindex++;
-  if (rule.prefix == nullptr) {
+  if (rule.prefix == NULL) {
     std::cerr << "Expected expression.\n";
     exit(1);
   }
@@ -112,7 +112,7 @@ void Parser::parsePrecedence(Precedence precedence) {
          precedence <= getPrecedence(currentToken())) {
     rule = parseRules[+currentToken()];
     tindex++;
-    if (rule.infix != nullptr)
+    if (rule.infix != NULL)
       (this->*rule.infix)();
   }
 }

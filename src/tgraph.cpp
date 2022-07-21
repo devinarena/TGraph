@@ -28,20 +28,38 @@ void TGraph::setup() {
   screen = std::vector(screenHeight, std::vector(screenWidth, false));
 }
 
+void TGraph::draw() {
+  system("cls");
+  for (int j = 0; j < screenHeight; j++) {
+    for (int i = 0; i < screenWidth; i++) {
+      if (screen[j][i]) {
+        std::cout << "*";
+      } else {
+        int x = i - screenWidth / 2;
+        int y = screenHeight / 2 - j;
+        if (x == 0 && y == 0)
+            std::cout << "O";
+        else if (x == 0)
+            std::cout << "|";
+        else if (y == 0)
+            std::cout << "-";
+        else
+            std::cout << " ";
+      }
+    }
+    std::cout << "\n";
+  }
+}
+
 void TGraph::parseEquation(std::string& equation) {
   std::vector<int> tokens = scanner.scan(equation);
   ops = parser.parse(tokens);
 #ifdef TG_DEBUG
   parser.printOPs(ops);
 #endif
-  for (int i = 0; i <= 10; i++)
-    std::cout << simulateEquation(ops, i) << "\n";
 }
 
-int TGraph::simulateEquation(std::vector<int>& ops, int x) {
-  // x * 2 - 1
-  // x 2 1
-  // * -
+int TGraph::simulateEquation(int x) {
 #undef CONST
   std::stack<int> nums;
   int start = 0;
@@ -111,4 +129,17 @@ int TGraph::simulateEquation(std::vector<int>& ops, int x) {
   }
   return nums.top();
 #define CONST const
+}
+
+void TGraph::computePoints() {
+  for (int i = 0; i < screenWidth; i++) {
+    for (int j = 0; j < screenHeight; j++) {
+      screen[j][i] = false;
+    }
+    int x = i - screenWidth / 2;
+    int y = screenHeight / 2 - simulateEquation(x);
+    if (y > 0 && y < screenHeight) {
+      screen[y][i] = true;
+    }
+  }
 }

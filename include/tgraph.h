@@ -36,7 +36,8 @@ class TGraph {
   void setup();
   void draw();
   void parseEquation(std::string& equation);
-  int simulateEquation(std::vector<int>& ops, int x);
+  void computePoints();
+  int simulateEquation(int x);
 };
 
 #endif

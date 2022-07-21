@@ -34,6 +34,8 @@ int main(int argc, char** argv) {
     }
     TGraph tG;
     tG.parseEquation(equation);
+    tG.computePoints();
+    tG.draw();
   }
   return 0;
 }

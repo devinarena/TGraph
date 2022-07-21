@@ -49,6 +49,7 @@ std::vector<int> Scanner::scan(std::string& equation) {
       std::string num = equation.substr(i, p - i);
       tokens.push_back(+Token::CONST);
       tokens.push_back(std::stoi(num));
+      i = p - 1;
     }
   }
   return tokens;
