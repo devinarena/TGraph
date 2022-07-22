@@ -1,4 +1,354 @@
 make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
-'make.exe' is not recognized as an internal or external command,
-operable program or batch file.
+# GNU Make 4.3
+# Built for x86_64-pc-msys
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+ 
 
+# Make data base, printed on Thu Jul 21 22:23:15 2022
+
+# Variables
+
+# environment
+SYSTEMDRIVE = C:
+# environment
+JAVA_HOME = C:\Program Files\Java\jdk-17.0.2
+# makefile (from 'makefile', line 10)
+OBJ := src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp
+# environment
+LC_ALL = C
+# makefile (from 'makefile', line 9)
+SRC := src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp
+# environment
+USERPROFILE = C:\Users\devin
+# environment
+VBOX_MSI_INSTALL_PATH = C:\Program Files\Oracle\VirtualBox\
+# environment
+LOCALAPPDATA = C:\Users\devin\AppData\Local
+# makefile (from 'makefile', line 3)
+SRC_DIR := src
+# environment
+VSCODE_CWD = C:\Users\devin\AppData\Local\Programs\Microsoft VS Code
+# environment
+SYSTEMROOT = C:\Windows
+# environment
+PROCESSOR_LEVEL = 23
+# environment
+PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
+# default
+MAKE_COMMAND := make
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# makefile (from 'makefile', line 4)
+OBJ_DIR := obj
+# environment
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_17568_CCBWYRKXZRPWAHZQ
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+.VARIABLES := 
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_CODE_CACHE_PATH = C:\Users\devin\AppData\Roaming\Code\CachedData\3b889b090b5ad5793f524b5d1d39fda662b96a2a
+# environment
+LANG = C
+# default
+.LOADED := 
+# environment
+TMP = /c/Users/devin/AppData/Local/Temp
+# default
+.INCLUDE_DIRS = /usr/include /usr/include
+# makefile
+MAKEFLAGS = pqrR
+# environment
+ONEDRIVE = C:\Users\devin\OneDrive
+# makefile
+CURDIR := /c/Users/devin/Documents/GitHub/TGraph
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+PROGRAMFILES = C:\Program Files
+# environment
+MFLAGS = -pqrR
+# default
+.SHELLFLAGS := -c
+# environment
+!C: = c:\Users\devin\Documents\GitHub\TGraph
+# environment
+COMMONPROGRAMW6432 = C:\Program Files\Common Files
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# makefile (from 'makefile', line 1)
+MAKEFILE_LIST := makefile
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_PID = 17568
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# automatic
+*F = $(notdir $*)
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# default
+MAKE_HOST := x86_64-pc-msys
+# environment
+PROGRAMDATA = C:\ProgramData
+# default
+SHELL := /bin/sh
+# environment
+HOMEPATH = \Users\devin
+# default
+MAKECMDGOALS := all
+# environment
+DRIVERDATA = C:\Windows\System32\Drivers\DriverData
+# environment
+COMSPEC = C:\Windows\system32\cmd.exe
+# environment
+WINDIR = C:\Windows
+# environment
+MAKELEVEL := 0
+# default
+MAKE = $(MAKE_COMMAND)
+# environment
+PATH = /c/Program Files (x86)/Common Files/Oracle/Java/javapath:/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/c/Windows/system32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0:/c/Windows/System32/OpenSSH:/c/Program Files/Git/cmd:/c/Users/devin/AppData/Local/Programs/Python/Python310:/c/Users/devin/AppData/Local/Programs/Python/Python310/Scripts:/c/Program Files/nodejs:/c/Program Files (x86)/Pulse Secure/VC142.CRT/X64:/c/Program Files (x86)/Pulse Secure/VC142.CRT/X86:/c/Program Files/PuTTY:/c/Program Files/Vim/vim82:/c/Users/devin/AppData/Roaming/npm:/c/Program Files/WireGuard:/c/Program Files/dotnet:/mingw64/bin:/usr/bin:/c/Program Files/Java/jdk-17.0.2/bin:/c/Users/devin/AppData/Local/Microsoft/WindowsApps:/c/Users/devin/AppData/Local/Programs/Microsoft VS Code/bin:/c/Users/devin/.ebcli-virtual-env/executables:/c/Users/devin/.dotnet/tools
+# environment
+COMPUTERNAME = DESKTOP-54SJFHM
+# default
+MAKEFILES := 
+# automatic
+^F = $(notdir $^)
+# environment
+PROMPT = $P$G
+# environment
+LOGONSERVER = \\DESKTOP-54SJFHM
+# environment
+USERNAME = Devin
+# environment
+COMMONPROGRAMFILES = C:\Program Files\Common Files
+# automatic
+?F = $(notdir $?)
+# environment
+PROGRAMW6432 = C:\Program Files
+# environment
+PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+# automatic
++F = $(notdir $+)
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+USERDOMAIN = DESKTOP-54SJFHM
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+OS = Windows_NT
+# makefile (from 'makefile', line 7)
+EXE := bin/tgraph
+# makefile
+.DEFAULT_GOAL := all
+# default
+MAKE_VERSION := 4.3
+# environment
+PROGRAMFILES(X86) = C:\Program Files (x86)
+# environment
+USERDOMAIN_ROAMINGPROFILE = DESKTOP-54SJFHM
+# environment
+NUMBER_OF_PROCESSORS = 12
+# environment
+PUBLIC = C:\Users\Public
+# environment
+APPDATA = C:\Users\devin\AppData\Roaming
+# environment
+HOMEDRIVE = C:
+# environment
+PROCESSOR_ARCHITECTURE = AMD64
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+HOME = /home/Devin
+# environment
+COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
+ 
+# makefile (from 'makefile', line 5)
+BIN_DIR := bin
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+TEMP = /c/Users/devin/AppData/Local/Temp
+# environment
+VSCODE_IPC_HOOK = \\.\pipe\af5c08bea7212bfbef982b77adbd9c5d-1.69.2-main-sock
+# environment
+TERM = xterm-256color
+# default
+.RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# default
+SUFFIXES := 
+# environment
+ALLUSERSPROFILE = C:\ProgramData
+# environment
+SESSIONNAME = Console
+# makefile (from 'makefile', line 12)
+CXXFLAGS = -g -Wall
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
+# environment
+PROCESSOR_REVISION = 7100
+# makefile (from 'makefile', line 1)
+CC = g++
+# environment
+PROCESSOR_IDENTIFIER = AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
+# variable set hash-table stats:
+# Load=99/1024=10%, Rehash=0, Collisions=14/141=10%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# src (device 3396416053, inode 9007199255880738): 6 files, no impossibilities.
+# . (device 3396416053, inode 3377699722313167): 11 files, no impossibilities.
+
+# 17 files, no impossibilities in 2 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+# Not a target:
+src/main.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-07-21 18:26:04.7795841
+#  File has been updated.
+#  Successfully updated.
+
+clean:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 25):
+	@$(RM) -rv $(BIN_DIR) $(OBJ_DIR)
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+all: bin/tgraph
+#  Phony target (prerequisite of .PHONY).
+#  Command line target.
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/5=0%
+
+# Not a target:
+src/parser.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-07-21 18:14:53.4640751
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+src/tgraph.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-07-21 19:08:21.0341123
+#  File has been updated.
+#  Successfully updated.
+
+bin:
+#  Implicit rule search has not been done.
+#  Last modified 2022-07-21 19:04:54.7022976
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'makefile', line 22):
+	mkdir -p $@
+
+# Not a target:
+makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-07-20 01:16:58.0554205
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+src/scanner.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-07-21 19:04:48.8621766
+#  File has been updated.
+#  Successfully updated.
+
+bin/tgraph: src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp | bin
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: ''
+#  Last modified 2022-07-21 19:04:54.8244089
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := bin/tgraph
+# automatic
+# * := 
+# automatic
+# < := src/main.cpp
+# automatic
+# + := src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp
+# automatic
+# % := 
+# automatic
+# ^ := src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp
+# automatic
+# ? := src/tgraph.cpp
+# automatic
+# | := bin
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=2/15=13%
+#  recipe to execute (from 'makefile', line 19):
+	$(CC) $(CXXFLAGS) $^ -o $@
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+.PHONY: all clean
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=12/1024=1%, Rehash=0, Collisions=0/35=0%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 26 / storage = 233 B / avg = 8 B
+# current buf: size = 8162 B / used = 233 B / count = 26 / avg = 8 B
+
+# strcache performance: lookups = 45 / hit rate = 42%
+# hash-table stats:
+# Load=26/8192=0%, Rehash=0, Collisions=0/45=0%
+# Finished Make data base on Thu Jul 21 22:23:15 2022
+
+ 

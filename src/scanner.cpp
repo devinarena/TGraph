@@ -92,8 +92,14 @@ std::vector<Token> Scanner::scan(std::string& equation) {
       i = p - 1;
     } else {
       std::string name = equation.substr(i, p - i);
-      tokens.push_back(TOKEN(TType::FUNC));
-      tokens.push_back(FNPTR_TOKEN(resolveFunction(name)));
+      BuiltinFunc fn = resolveFunction(name);
+      if (fn != nullptr) {
+        tokens.push_back(TOKEN(TType::FUNC));
+        tokens.push_back(FNPTR_TOKEN(fn));
+      } else {
+        tokens.push_back(TOKEN(TType::CONST));
+        tokens.push_back(VALUE_TOKEN(resolveConstant(name)));
+      }
       i = p - 1;
     }
   }

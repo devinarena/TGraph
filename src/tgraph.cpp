@@ -35,8 +35,8 @@ void TGraph::setupWindow() {
   writeToScreen("TGraph v" + std::to_string(VERSION_MAJOR) + "." +
                     std::to_string(VERSION_MINOR),
                 1, 1);
-  writeToScreen("x-step: 1.0", 1, 2);
-  writeToScreen("y-step: 1.0", 1, 3);
+  writeToScreen("x-step: " + std::to_string(stepX), 1, 2);
+  writeToScreen("y-step: " + std::to_string(stepY), 1, 3);
   writeToScreen("Equations:", 1, 4);
 }
 
@@ -50,70 +50,9 @@ void TGraph::cli() {
   draw();
   std::string command{""};
   do {
-    char curr = 'a' + (23 + getGraphed()) % 26;
     std::cout << "Equation or command > (y = ) ";
     std::getline(std::cin, command);
-    std::vector<std::string> tokens;
-    size_t start = 0;
-    for (size_t i = 0; i < command.length(); i++) {
-      if (command[i] == ' ' && start != i) {
-        tokens.push_back(command.substr(start, i - start));
-        start = i + 1;
-      }
-    }
-    if (start != command.length()) {
-      tokens.push_back(command.substr(start, command.length() - start));
-    }
-    if (tokens.size() == 0)
-      break;
-    if (tokens[0].compare("help") == 0) {
-      system("cls");
-      std::cout << "TGraph v" << VERSION_MAJOR << "." << VERSION_MINOR
-                << " by Devin Arena:\n";
-      std::cout << "help - displays this help message menu\n";
-      std::cout << "graph - re-renders the graph\n";
-      std::cout << "clear - clears all equations\n";
-      std::cout << "exit - exits the program\n";
-      std::cout << "xstep [step_size, default=1] - sets the x step size\n";
-      std::cout << "ystep [step_size, default=1] - sets the y step size\n";
-      std::cout << "Simply enter an equation to graph it.\n";
-      std::cout << "\nExamples:\n";
-      std::cout << "y = x^2\n";
-      std::cout << "y = sin(x)\n";
-      std::cout << "y = x*cos(x / 5)\n";
-      std::cout << "y = e ^ sqrt(x)\n\n";
-    } else if (tokens[0].compare("graph") == 0) {
-      system("cls");
-      draw();
-    } else if (tokens[0].compare("clear") == 0) {
-      system("cls");
-      setupWindow();
-      draw();
-    } else if (tokens[0].compare("exit") == 0) {
-      exit(0);
-    } else if (tokens[0].compare("xstep") == 0) {
-      if (tokens.size() == 1) {
-        std::cout << "x-step: " << stepX << "\n";
-      } else if (tokens.size() == 2) {
-        stepX = std::stod(tokens[1]);
-        writeToScreen("x-step: " + std::to_string(stepX), 1, 2);
-      } else {
-        std::cout << "Invalid command syntax.\n";
-      }
-    } else if (tokens[0].compare("ystep") == 0) {
-      if (tokens.size() == 1) {
-        std::cout << "y-step: " << stepY << "\n";
-      } else if (tokens.size() == 2) {
-        stepY = std::stod(tokens[1]);
-        writeToScreen("y-step: " + std::to_string(stepY), 1, 3);
-      } else {
-        std::cout << "Invalid command syntax.\n";
-      }
-    } else {
-      parseEquation(command);
-      computePoints(curr);
-      draw();
-    }
+    parseInput(command);
   } while (command.length() > 0);
 }
 
@@ -256,11 +195,86 @@ double TGraph::simulateEquation(double x) {
 
 void TGraph::computePoints(char symbol) {
   for (int i = 0; i < screenWidth; i++) {
-    int x = (i - screenWidth / 2) * stepX;
+    double x = (i - screenWidth / 2) * stepX;
     int y = round(screenHeight / 2 - simulateEquation(x) / stepY);
     if (y > 0 && y < screenHeight) {
       screen[y][i] = symbol;
     }
+  }
+}
+
+void TGraph::parseInput(std::string input) {
+  char curr = 'a' + (23 + getGraphed()) % 26;
+  std::vector<std::string> tokens;
+  size_t start = 0;
+  for (size_t i = 0; i < input.length(); i++) {
+    if (input[i] == ' ' && start != i) {
+      tokens.push_back(input.substr(start, i - start));
+      start = i + 1;
+    }
+  }
+  if (start != input.length()) {
+    tokens.push_back(input.substr(start, input.length() - start));
+  }
+  if (tokens.size() == 0)
+    return;
+  if (tokens[0].compare("help") == 0) {
+    system("cls");
+    std::cout << "TGraph v" << VERSION_MAJOR << "." << VERSION_MINOR
+              << " by Devin Arena:\n";
+    std::cout << "help - displays this help message menu\n";
+    std::cout << "graph - re-renders the graph\n";
+    std::cout << "clear - clears all equations\n";
+    std::cout << "exit - exits the program\n";
+    std::cout << "xstep [step_size, default=1] - sets the x step size\n";
+    std::cout << "ystep [step_size, default=1] - sets the y step size\n";
+    std::cout << "Simply enter an equation to graph it.\n";
+    std::cout << "\nExamples:\n";
+    std::cout << "y = x^2\n";
+    std::cout << "y = sin(x)\n";
+    std::cout << "y = x*cos(x / 5)\n";
+    std::cout << "y = e ^ sqrt(x)\n\n";
+  } else if (tokens[0].compare("graph") == 0) {
+    system("cls");
+    draw();
+  } else if (tokens[0].compare("clear") == 0) {
+    system("cls");
+    setupWindow();
+    draw();
+  } else if (tokens[0].compare("exit") == 0) {
+    exit(0);
+  } else if (tokens[0].compare("xstep") == 0) {
+    if (tokens.size() == 1) {
+      std::cout << "x-step: " << stepX << "\n";
+    } else if (tokens.size() == 2) {
+      stepX = std::stod(tokens[1]);
+      writeToScreen("x-step: " + std::to_string(stepX), 1, 2);
+    } else {
+      std::cout << "Invalid command syntax.\n";
+    }
+  } else if (tokens[0].compare("ystep") == 0) {
+    if (tokens.size() == 1) {
+      std::cout << "y-step: " << stepY << "\n";
+    } else if (tokens.size() == 2) {
+      stepY = std::stod(tokens[1]);
+      writeToScreen("y-step: " + std::to_string(stepY), 1, 3);
+    } else {
+      std::cout << "Invalid command syntax.\n";
+    }
+  } else if (tokens[0].compare("-") == 0) {
+    stepY *= 2;
+    stepX *= 2;
+    writeToScreen("x-step: " + std::to_string(stepX), 1, 2);
+    writeToScreen("y-step: " + std::to_string(stepY), 1, 3);
+  } else if (tokens[0].compare("+") == 0) {
+    stepY *= 0.5;
+    stepX *= 0.5;
+    writeToScreen("x-step: " + std::to_string(stepX), 1, 2);
+    writeToScreen("y-step: " + std::to_string(stepY), 1, 3);
+  } else {
+    parseEquation(input);
+    computePoints(curr);
+    draw();
   }
 }
 

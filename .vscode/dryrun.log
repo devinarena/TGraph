@@ -1,4 +1,6 @@
-make.exe --dry-run --keep-going --print-directory
-'make.exe' is not recognized as an internal or external command,
-operable program or batch file.
-
+make.exe --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/c/Users/devin/Documents/GitHub/TGraph'
+mkdir -p bin
+g++ -g -Wall src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp -o bin/tgraph
+make: Leaving directory '/c/Users/devin/Documents/GitHub/TGraph'
+ 

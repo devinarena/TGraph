@@ -54,6 +54,7 @@ class TGraph {
   void setupWindow();
   void cli();
   void draw();
+  void parseInput(std::string input);
   void parseEquation(std::string& equation);
   void computePoints(char symbol);
   double simulateEquation(double x);

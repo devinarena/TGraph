@@ -27,10 +27,12 @@ static double tg_tan(double angle) {
 }
 
 static double tg_sqrt(double x) {
+  if (x < 0)
+    return INT_MIN;
   return std::sqrt(x);
 }
 
-static BuiltinFunc resolveFunction(std::string fname) {
+static inline BuiltinFunc resolveFunction(std::string fname) {
   if (fname == "sin") {
     return &tg_sin;
   } else if (fname == "cos") {
@@ -41,6 +43,16 @@ static BuiltinFunc resolveFunction(std::string fname) {
     return &tg_sqrt;
   } else {
     return nullptr;
+  }
+}
+
+static inline double resolveConstant(std::string cname) {
+  if (cname == "pi") {
+    return M_PI;
+  } else if (cname == "e") {
+    return M_E;
+  } else {
+    return 0;
   }
 }
 

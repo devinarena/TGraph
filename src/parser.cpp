@@ -31,6 +31,9 @@ Parser::Parser() : tindex(0) {
       (ParseRule){.prefix = &unary, .precedence = Precedence::UNARY};
   parseRules[+TType::FUNC] =
       (ParseRule){.prefix = &func, .precedence = Precedence::NONE};
+  parseRules[+TType::C_PAREN] = (ParseRule){.precedence = Precedence::NONE};
+  parseRules[+TType::O_PAREN] =
+      (ParseRule){.prefix = &grouping, .precedence = Precedence::NONE};
 }
 
 Token Parser::currentToken() {
@@ -69,6 +72,7 @@ void Parser::func() {
   expression();
   if (currentToken().type != TType::C_PAREN) {
     throw std::runtime_error("Expected closing parenthesis.");
+    return;
   }
   tindex++;
   ops.push_back(OPCODE(OP::BUILTIN));
