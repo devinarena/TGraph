@@ -6,8 +6,8 @@
  * @since 7/19/2022
  **/
 
-#include "../include/parser.h"
-#include "../include/tgraph.h"
+#include "../include/parser.hpp"
+#include "../include/tgraph.hpp"
 
 #include <iostream>
 #include <stack>
@@ -29,8 +29,8 @@ Parser::Parser() : tindex(0) {
       (ParseRule){.infix = &binary, .precedence = Precedence::POWER};
   parseRules[+TType::MAGIC] =
       (ParseRule){.prefix = &unary, .precedence = Precedence::UNARY};
-  parseRules[+TType::O_PAREN] =
-      (ParseRule){.prefix = &grouping, .precedence = Precedence::NONE};
+  parseRules[+TType::FUNC] =
+      (ParseRule){.prefix = &func, .precedence = Precedence::NONE};
 }
 
 Token Parser::currentToken() {
@@ -52,6 +52,27 @@ void Parser::grouping() {
     throw std::runtime_error("Expected closing parenthesis.");
   }
   tindex++;
+}
+
+void Parser::call() {}
+
+void Parser::expression() {
+  parsePrecedence(Precedence::TERM);
+}
+
+void Parser::func() {
+  Token funptr = currentToken();
+  if (!funptr.fnptr) {
+    throw std::runtime_error("Unexpected function call.");
+  }
+  tindex += 2;  // skip this token and the opening parenthesis
+  expression();
+  if (currentToken().type != TType::C_PAREN) {
+    throw std::runtime_error("Expected closing parenthesis.");
+  }
+  tindex++;
+  ops.push_back(OPCODE(OP::BUILTIN));
+  ops.push_back(FUNC(funptr.fnptr));
 }
 
 void Parser::binary() {
@@ -77,7 +98,7 @@ void Parser::binary() {
       break;
     default:
       std::cerr << "Error: Invalid binary operator\n";
-      break;
+      exit(1);
   }
 }
 
@@ -95,7 +116,7 @@ void Parser::unary() {
       break;
     default:
       std::cerr << "Invalid unary operator: " << +op.type << "\n";
-      break;
+      exit(1);
   }
 }
 
@@ -126,10 +147,6 @@ void Parser::parsePrecedence(Precedence precedence) {
     if (rule.infix != NULL)
       (this->*rule.infix)();
   }
-}
-
-void Parser::expression() {
-  parsePrecedence(Precedence::TERM);
 }
 
 std::vector<Operand> Parser::parse(std::vector<Token>& tokens) {
@@ -183,6 +200,10 @@ int Parser::printOP(std::vector<Operand>& ops, int idx) {
     }
     case OP::CONST: {
       std::cout << "CONST (" << ops[idx + 1].value << ")\n";
+      return idx + 2;
+    }
+    case OP::BUILTIN: {
+      std::cout << "BUILTIN (" << ops[idx + 1].fnptr << ")\n";
       return idx + 2;
     }
     default:

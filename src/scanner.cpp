@@ -6,8 +6,9 @@
  * @since 7/19/2022
  **/
 
-#include "../include/scanner.h"
-#include "../include/tgraph.h"
+#include "../include/scanner.hpp"
+#include "../include/builtins.hpp"
+#include "../include/tgraph.hpp"
 
 #include <iostream>
 
@@ -44,8 +45,13 @@ std::vector<Token> Scanner::scan(std::string& equation) {
         continue;
       }
       case 'x': {
-        tokens.push_back(TOKEN(TType::VAR));
-        continue;
+        if (i + 1 < equation.length()) {
+          if (!isalnum(equation[i + 1]))
+            tokens.push_back(TOKEN(TType::VAR));
+          continue;
+        } else
+          tokens.push_back(TOKEN(TType::VAR));
+        break;
       }
       case '(': {
         tokens.push_back(TOKEN(TType::O_PAREN));
@@ -57,6 +63,7 @@ std::vector<Token> Scanner::scan(std::string& equation) {
       }
     }
     size_t p = i;
+    bool num = true;
     while (p < equation.length()) {
       if (isdigit(equation[p])) {
         p++;
@@ -66,16 +73,27 @@ std::vector<Token> Scanner::scan(std::string& equation) {
           while (p < equation.length() && isdigit(equation[p])) {
             p++;
           }
+        } else if (isalpha(equation[p])) {
+          num = false;
+          p++;
+          while (p < equation.length() && isalnum(equation[p])) {
+            p++;
+          }
         }
         break;
       }
     }
     if (p == i) {
       std::cerr << "Invalid token: " << equation[i] << "\n";
-    } else {
+    } else if (num) {
       std::string num = equation.substr(i, p - i);
       tokens.push_back(TOKEN(TType::CONST));
       tokens.push_back(VALUE_TOKEN(std::stod(num)));
+      i = p - 1;
+    } else {
+      std::string name = equation.substr(i, p - i);
+      tokens.push_back(TOKEN(TType::FUNC));
+      tokens.push_back(FNPTR_TOKEN(resolveFunction(name)));
       i = p - 1;
     }
   }

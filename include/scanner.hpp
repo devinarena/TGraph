@@ -9,11 +9,14 @@
 #ifndef TGRAPH_SCANNER_H
 #define TGRAPH_SCANNER_H
 
+#include "builtins.hpp"
+
 #include <string>
 #include <vector>
 
 #define TOKEN(t) ((Token){.type = t})
 #define VALUE_TOKEN(v) ((Token){.value = v})
+#define FNPTR_TOKEN(ptr) ((Token){.fnptr = ptr})
 
 enum class OP;
 
@@ -29,12 +32,14 @@ enum class TType {
   MAGIC,
   O_PAREN,
   C_PAREN,
+  FUNC,
   END
 };
 
 union Token {
   TType type;
   double value;
+  BuiltinFunc fnptr;
 };
 
 class Scanner {

@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-#include "./scanner.h"
+#include "./scanner.hpp"
 
 enum class OP;
 
@@ -42,7 +42,9 @@ class Parser {
   size_t tindex;
   struct ParseRule parseRules[(int)TType::END];
   void parsePrecedence(Precedence precedence);
+  void call();
   void expression();
+  void func();
   void grouping();
   void binary();
   void unary();

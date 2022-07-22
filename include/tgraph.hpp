@@ -11,14 +11,19 @@
 
 #include <vector>
 
-#include "parser.h"
+#include "./builtins.hpp"
+#include "parser.hpp"
 
-// #define TG_DEBUG
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 0
+
+#define TG_DEBUG
 
 #define OPCODE(op) ((Operand){.opcode = op})
 #define VALUE(val) ((Operand){.value = val})
+#define FUNC(ptr) ((Operand){.fnptr = ptr})
 
-enum class OP { VAR, CONST, NEG, ADD, SUB, MUL, DIV, POW, MAGIC, END };
+enum class OP { VAR, CONST, NEG, ADD, SUB, MUL, DIV, POW, MAGIC, BUILTIN, END };
 template <typename T>
 constexpr auto operator+(T e) noexcept
     -> std::enable_if_t<std::is_enum<T>::value, std::underlying_type_t<T>> {
@@ -28,6 +33,7 @@ constexpr auto operator+(T e) noexcept
 union Operand {
   OP opcode;
   double value;
+  BuiltinFunc fnptr;
 };
 
 class TGraph {
@@ -35,10 +41,13 @@ class TGraph {
   int screenWidth;
   int screenHeight;
   int graphed{0};
+  double stepX{1.0};
+  double stepY{1.0};
   std::vector<std::vector<char>> screen;
   std::vector<Operand> ops;
   Parser parser;
   Scanner scanner;
+  void writeToScreen(std::string text, int x, int y);
 
  public:
   TGraph();
@@ -47,7 +56,7 @@ class TGraph {
   void draw();
   void parseEquation(std::string& equation);
   void computePoints(char symbol);
-  int simulateEquation(double x);
+  double simulateEquation(double x);
   int getGraphed() const;
 };
 

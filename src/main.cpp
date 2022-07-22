@@ -10,10 +10,7 @@
 #include <iostream>
 #include <string>
 
-#include "../include/tgraph.h"
-
-#define VERSION_MAJOR 1
-#define VERSION_MINOR 0
+#include "../include/tgraph.hpp"
 
 int main(int argc, char** argv) {
   if (argc == 1) {
