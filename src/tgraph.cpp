@@ -24,17 +24,28 @@ TGraph::TGraph() {
  * draws a blank graph.
  */
 void TGraph::setupWindow() {
+// get the window size based on platform
+// windows
+#ifdef _WIN32 || _WIN64 || __CYGWIN__
   CONSOLE_SCREEN_BUFFER_INFO csbi;
-
   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
   screenWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
   screenHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+#endif
+// macOS and Linux
+#ifdef __linux__ || __unix__ || __unix || unix || __APPLE__ || __MACH__
+  struct winsize w;
+  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+  screenWidth = w.ws_col;
+  screenHeight = w.ws_row;
+#endif
 
   screen = std::vector(screenHeight, std::vector(screenWidth, ' '));
 
   stepX = 1.0;
   stepY = 1.0;
   ops.clear();
+  equations.clear();
 
   rerender();
 }
@@ -58,7 +69,7 @@ void TGraph::writeToScreen(std::string text, int x, int y) {
 void TGraph::cli() {
   std::string command{""};
   do {
-    std::cout << "Equation or command > (y = ) ";
+    std::cout << "Equation or command > (f(x) = ) ";
     std::getline(std::cin, command);
     parseInput(command);
   } while (command.length() > 0);
@@ -78,7 +89,7 @@ void TGraph::computePoints(int equation) {
       screen[y][i] = symbol;
     }
   }
-  writeToScreen("y = " + equation, 1, 4 + equation);
+  writeToScreen("f(x) = " + equations[equation], 1, 5 + equation);
 }
 
 /**
@@ -139,6 +150,7 @@ void TGraph::rerender() {
 void TGraph::parseEquation(std::string& equation) {
   std::vector<Token> tokens = scanner.scan(equation);
   ops.push_back(parser.parse(tokens));
+  equations.push_back(equation);
 #ifdef TG_DEBUG
   parser.printOPs(ops);
 #endif
@@ -262,7 +274,11 @@ void TGraph::parseInput(std::string input) {
   std::vector<std::string> tokens;
   size_t start = 0;
   for (size_t i = 0; i < input.length(); i++) {
-    if (input[i] == ' ' && start != i) {
+    if (input[i] == ' ') {
+      if (start == i) {
+        start = i + 1;
+        continue;
+      }
       tokens.push_back(input.substr(start, i - start));
       start = i + 1;
     }
@@ -286,10 +302,10 @@ void TGraph::parseInput(std::string input) {
     std::cout << "'-' - zoom out (xstep *= 2, ystep *= 2)\n";
     std::cout << "Simply enter an equation to graph it.\n";
     std::cout << "\nExamples:\n";
-    std::cout << "y = x^2\n";
-    std::cout << "y = sin(x)\n";
-    std::cout << "y = x*cos(x / 5)\n";
-    std::cout << "y = e ^ sqrt(x)\n\n";
+    std::cout << "f(x) = x^2\n";
+    std::cout << "f(x) = sin(x)\n";
+    std::cout << "f(x) = x*cos(x / 5)\n";
+    std::cout << "f(x) = e ^ sqrt(x)\n\n";
   } else if (tokens[0].compare("graph") == 0) {
     rerender();
   } else if (tokens[0].compare("clear") == 0) {
@@ -301,7 +317,7 @@ void TGraph::parseInput(std::string input) {
       std::cout << "x-step: " << stepX << "\n";
     } else if (tokens.size() == 2) {
       stepX = std::stod(tokens[1]);
-      writeToScreen("x-step: " + std::to_string(stepX), 1, 2);
+      rerender();
     } else {
       std::cout << "Invalid command syntax.\n";
     }
@@ -310,7 +326,7 @@ void TGraph::parseInput(std::string input) {
       std::cout << "y-step: " << stepY << "\n";
     } else if (tokens.size() == 2) {
       stepY = std::stod(tokens[1]);
-      writeToScreen("y-step: " + std::to_string(stepY), 1, 3);
+      rerender();
     } else {
       std::cout << "Invalid command syntax.\n";
     }

@@ -56,6 +56,7 @@ class TGraph {
   double stepY{1.0};
   std::vector<std::vector<char>> screen;
   std::vector<std::vector<Operand>> ops;
+  std::vector<std::string> equations;
   Parser parser;
   Scanner scanner;
   void writeToScreen(std::string text, int x, int y);
