@@ -12,6 +12,11 @@
 #include <iostream>
 #include <stack>
 
+/**
+ * @brief Default constructor. Generates the parseRule table.
+ *
+ * @param tokens the list of tokens to parse.
+ */
 Parser::Parser() : tindex(0) {
   parseRules[+TType::VAR] =
       (ParseRule){.prefix = &variable, .precedence = Precedence::NONE};
@@ -36,6 +41,11 @@ Parser::Parser() : tindex(0) {
       (ParseRule){.prefix = &grouping, .precedence = Precedence::NONE};
 }
 
+/**
+ * @brief Gets the current token or NONE if we are finished parsing.
+ *
+ * @return Token the current token.
+ */
 Token Parser::currentToken() {
   if (tindex >= tokens.size()) {
     return TOKEN(TType::NONE);
@@ -43,12 +53,27 @@ Token Parser::currentToken() {
   return tokens[tindex];
 }
 
+/**
+ * @brief Gets the previous token or NONE if there is no previous token.
+ *
+ * @return Token the previous token.
+ */
 Token Parser::prevToken() {
   if (tindex == 0)
     return TOKEN(TType::NONE);
   return tokens[tindex - 1];
 }
 
+/**
+ * @brief Base case for the Pratt Parser, all equations are expressions.
+ */
+void Parser::expression() {
+  parsePrecedence(Precedence::TERM);
+}
+
+/**
+ * @brief Descent case for Handles groupings (parentheses).
+ */
 void Parser::grouping() {
   expression();
   if (currentToken().type != TType::C_PAREN) {
@@ -57,12 +82,9 @@ void Parser::grouping() {
   tindex++;
 }
 
-void Parser::call() {}
-
-void Parser::expression() {
-  parsePrecedence(Precedence::TERM);
-}
-
+/**
+ * @brief Descent case for built-in functions (e.g. sin, cos)
+ */
 void Parser::func() {
   Token funptr = currentToken();
   if (!funptr.fnptr) {
@@ -79,6 +101,9 @@ void Parser::func() {
   ops.push_back(FUNC(funptr.fnptr));
 }
 
+/**
+ * @brief Descent case for binary operators.
+ */
 void Parser::binary() {
   Token op = prevToken();
 
@@ -106,6 +131,9 @@ void Parser::binary() {
   }
 }
 
+/**
+ * @brief Descent case for unary operators.
+ */
 void Parser::unary() {
   Token op = prevToken();
 
@@ -124,16 +152,28 @@ void Parser::unary() {
   }
 }
 
+/**
+ * @brief Descent case for literals (constants).
+ */
 void Parser::literal() {
   ops.push_back(OPCODE(OP::CONST));
   ops.push_back(VALUE(currentToken().value));
   tindex++;
 }
 
+/**
+ * @brief Descent case for variables.
+ */
 void Parser::variable() {
   ops.push_back(OPCODE(OP::VAR));
 }
 
+/**
+ * @brief Pratt parser implementation. Parses the prefix and post-fix rules of
+ * given tokens.
+ *
+ * @param precedence
+ */
 void Parser::parsePrecedence(Precedence precedence) {
   ParseRule rule = parseRules[+currentToken().type];
   tindex++;
@@ -153,20 +193,40 @@ void Parser::parsePrecedence(Precedence precedence) {
   }
 }
 
+// PUBLIC FUNCTIONS
+
+/**
+ * @brief Parses a list of tokens, returning a list of opcodes.
+ * 
+ * @param tokens std::vector<Token>& of tokens to parse.
+ * @return std::vector<Operand> the parsed opcodes.
+ */
 std::vector<Operand> Parser::parse(std::vector<Token>& tokens) {
   this->tokens = tokens;
-  ops.erase(ops.begin(), ops.end());
+  ops = std::vector<Operand>();
   tindex = 0;
   expression();
   return ops;
 }
 
+/**
+ * @brief Debug function to print the opcodes.
+ * 
+ * @param ops std::vector<Operand>& the opcodes to print.
+ */
 void Parser::printOPs(std::vector<Operand>& ops) {
   for (size_t i = 0; i < ops.size();) {
     i = printOP(ops, i);
   }
 }
 
+/**
+ * @brief Debug function to print an opcode.
+ * 
+ * @param ops std::vector<Operand>& the opcodes to print.
+ * @param idx size_t the index of the opcode to print.
+ * @return int the index of the next opcode.
+ */
 int Parser::printOP(std::vector<Operand>& ops, int idx) {
   OP op = ops[idx].opcode;
   switch (op) {

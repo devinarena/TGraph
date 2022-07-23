@@ -20,22 +20,24 @@
 
 enum class OP;
 
+// Token Types for the scanner
 enum class TType {
-  NONE,
-  VAR,
-  CONST,
-  ADD,
-  SUB,
-  MUL,
-  DIV,
-  POW,
-  MAGIC,
-  O_PAREN,
-  C_PAREN,
-  FUNC,
+  NONE, // None
+  VAR, // e.g. x
+  CONST, // e.g. 1.0, 5, -3.5
+  ADD, // +
+  SUB, // -
+  MUL, // *
+  DIV, // /
+  POW, // ^
+  MAGIC, // ~
+  O_PAREN, // (
+  C_PAREN, // )
+  FUNC, // e.g. sin, cos, tan, etc.
   END
 };
 
+// Token union for the scanner
 union Token {
   TType type;
   double value;

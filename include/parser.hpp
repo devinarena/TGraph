@@ -2,7 +2,7 @@
 /**
  * @file parser.h
  * @author Devin Arena
- * @brief Parses equations, converting into a list of operations.
+ * @brief Parses tokens, converting into a list of opcodes.
  * @since 7/19/2022
  **/
 
@@ -16,6 +16,7 @@
 
 enum class OP;
 
+// Pratt Parser precedence table
 enum class Precedence {
   NONE,
   TERM,
@@ -27,6 +28,9 @@ enum class Precedence {
 class Parser;
 union Operand;
 
+/**
+ * @brief ParseRules contain pointers to prefix and infix functions for tokens.
+ */
 struct ParseRule {
   void (Parser::*prefix)(void);
   void (Parser::*infix)(void);
@@ -40,9 +44,11 @@ class Parser {
   std::vector<Operand> ops;
   std::vector<Token> tokens;
   size_t tindex;
-  struct ParseRule parseRules[(int)TType::END];
+  ParseRule parseRules[(int)TType::END];
+
+  Token currentToken();
+  Token prevToken();
   void parsePrecedence(Precedence precedence);
-  void call();
   void expression();
   void func();
   void grouping();
@@ -50,8 +56,6 @@ class Parser {
   void unary();
   void variable();
   void literal();
-  Token currentToken();
-  Token prevToken();
 
  public:
   Parser();

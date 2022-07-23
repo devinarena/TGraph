@@ -19,6 +19,10 @@ TGraph::TGraph() {
   setupWindow();
 }
 
+/**
+ * @brief Sets up the window. Grabs the window size, initializes the screen, and
+ * draws a blank graph.
+ */
 void TGraph::setupWindow() {
   CONSOLE_SCREEN_BUFFER_INFO csbi;
 
@@ -30,24 +34,28 @@ void TGraph::setupWindow() {
 
   stepX = 1.0;
   stepY = 1.0;
-  graphed = 0;
+  ops.clear();
 
-  writeToScreen("TGraph v" + std::to_string(VERSION_MAJOR) + "." +
-                    std::to_string(VERSION_MINOR),
-                1, 1);
-  writeToScreen("x-step: " + std::to_string(stepX), 1, 2);
-  writeToScreen("y-step: " + std::to_string(stepY), 1, 3);
-  writeToScreen("Equations:", 1, 4);
+  rerender();
 }
 
+/**
+ * @brief Helper for writing text to the screen 2d array.
+ *
+ * @param text std::string The text to write.
+ * @param x int The x coordinate to write the text to.
+ * @param y int The y coordinate to write the text to.
+ */
 void TGraph::writeToScreen(std::string text, int x, int y) {
   for (size_t i = 0; i < text.length(); i++) {
     screen[y][x + i] = text[i];
   }
 }
 
+/**
+ * @brief CLI interface.
+ */
 void TGraph::cli() {
-  draw();
   std::string command{""};
   do {
     std::cout << "Equation or command > (y = ) ";
@@ -56,6 +64,26 @@ void TGraph::cli() {
   } while (command.length() > 0);
 }
 
+/**
+ * @brief Compute the points of a specified equation.
+ *
+ * @param equation int The index of the equation to compute.
+ */
+void TGraph::computePoints(int equation) {
+  char symbol = 'a' + (23 + equation) % 26;
+  for (int i = 0; i < screenWidth; i++) {
+    double x = (i - screenWidth / 2) * stepX;
+    int y = round(screenHeight / 2 - simulateEquation(x, equation) / stepY);
+    if (y > 0 && y < screenHeight) {
+      screen[y][i] = symbol;
+    }
+  }
+  writeToScreen("y = " + equation, 1, 4 + equation);
+}
+
+/**
+ * @brief Draws the graph to the screen.
+ */
 void TGraph::draw() {
   system("cls");
   std::cout << std::endl;
@@ -82,26 +110,57 @@ void TGraph::draw() {
   }
 }
 
+/**
+ * @brief Re-renders the 2d screen array (for when zooming happens, etc.)
+ */
+void TGraph::rerender() {
+  system("cls");
+  screen = std::vector(screenHeight, std::vector(screenWidth, ' '));
+
+  writeToScreen("TGraph v" + std::to_string(VERSION_MAJOR) + "." +
+                    std::to_string(VERSION_MINOR),
+                1, 1);
+  writeToScreen("x-step: " + std::to_string(stepX), 1, 2);
+  writeToScreen("y-step: " + std::to_string(stepY), 1, 3);
+  writeToScreen("Equations:", 1, 4);
+
+  for (size_t i = 0; i < ops.size(); i++) {
+    computePoints(i);
+  }
+
+  draw();
+}
+
+/**
+ * @brief Parses an equation string and adds it to the list of equations.
+ *
+ * @param equation std::string The equation to add.
+ */
 void TGraph::parseEquation(std::string& equation) {
   std::vector<Token> tokens = scanner.scan(equation);
-  ops.erase(ops.begin(), ops.end());
-  ops = parser.parse(tokens);
-  graphed++;
-  writeToScreen("y = " + equation, 1, 4 + graphed);
+  ops.push_back(parser.parse(tokens));
 #ifdef TG_DEBUG
   parser.printOPs(ops);
 #endif
 }
 
-double TGraph::simulateEquation(double x) {
+/**
+ * @brief Simulates the specified equation.
+ *
+ * @param x double The x value to simulate the equation with.
+ * @param equation int the index of the equation to simulate.
+ * @return double The y value of the equation at x.
+ */
+double TGraph::simulateEquation(double x, int equation) {
 #undef CONST
   std::stack<double> nums;
   int start = 0;
-  for (size_t i = 0; i < ops.size(); i++) {
+  std::vector<Operand>& eqOps = ops[equation];
+  for (size_t i = 0; i < eqOps.size(); i++) {
     start = i;
-    switch (ops[i].opcode) {
+    switch (eqOps[i].opcode) {
       case OP::CONST: {
-        nums.push(ops[++i].value);
+        nums.push(eqOps[++i].value);
         break;
       }
       case OP::VAR: {
@@ -171,7 +230,7 @@ double TGraph::simulateEquation(double x) {
       case OP::BUILTIN: {
         double a = nums.top();
         nums.pop();
-        nums.push((*ops[++i].fnptr)(a));
+        nums.push((*eqOps[++i].fnptr)(a));
         break;
       }
     }
@@ -193,18 +252,13 @@ double TGraph::simulateEquation(double x) {
 #define CONST const
 }
 
-void TGraph::computePoints(char symbol) {
-  for (int i = 0; i < screenWidth; i++) {
-    double x = (i - screenWidth / 2) * stepX;
-    int y = round(screenHeight / 2 - simulateEquation(x) / stepY);
-    if (y > 0 && y < screenHeight) {
-      screen[y][i] = symbol;
-    }
-  }
-}
-
+/**
+ * @brief Input for the CLI and command line arguments. Either runs the command
+ * or parses an equation.
+ *
+ * @param input std::string The input to parse.
+ */
 void TGraph::parseInput(std::string input) {
-  char curr = 'a' + (23 + getGraphed()) % 26;
   std::vector<std::string> tokens;
   size_t start = 0;
   for (size_t i = 0; i < input.length(); i++) {
@@ -228,6 +282,8 @@ void TGraph::parseInput(std::string input) {
     std::cout << "exit - exits the program\n";
     std::cout << "xstep [step_size, default=1] - sets the x step size\n";
     std::cout << "ystep [step_size, default=1] - sets the y step size\n";
+    std::cout << "'+' - zoom in (xstep /= 2, ystep /= 2)\n";
+    std::cout << "'-' - zoom out (xstep *= 2, ystep *= 2)\n";
     std::cout << "Simply enter an equation to graph it.\n";
     std::cout << "\nExamples:\n";
     std::cout << "y = x^2\n";
@@ -235,12 +291,9 @@ void TGraph::parseInput(std::string input) {
     std::cout << "y = x*cos(x / 5)\n";
     std::cout << "y = e ^ sqrt(x)\n\n";
   } else if (tokens[0].compare("graph") == 0) {
-    system("cls");
-    draw();
+    rerender();
   } else if (tokens[0].compare("clear") == 0) {
-    system("cls");
     setupWindow();
-    draw();
   } else if (tokens[0].compare("exit") == 0) {
     exit(0);
   } else if (tokens[0].compare("xstep") == 0) {
@@ -262,24 +315,19 @@ void TGraph::parseInput(std::string input) {
       std::cout << "Invalid command syntax.\n";
     }
   } else if (tokens[0].compare("-") == 0) {
+    // zoom out
     stepY *= 2;
     stepX *= 2;
-    writeToScreen("x-step: " + std::to_string(stepX), 1, 2);
-    writeToScreen("y-step: " + std::to_string(stepY), 1, 3);
+    rerender();
   } else if (tokens[0].compare("+") == 0) {
     stepY *= 0.5;
     stepX *= 0.5;
-    writeToScreen("x-step: " + std::to_string(stepX), 1, 2);
-    writeToScreen("y-step: " + std::to_string(stepY), 1, 3);
+    rerender();
   } else {
     parseEquation(input);
-    computePoints(curr);
+    computePoints(ops.size() - 1);
     draw();
   }
 }
 
 // Getters and Setters
-
-int TGraph::getGraphed() const {
-  return graphed;
-}
