@@ -1,0 +1,31 @@
+
+                                                            |                                                           
+ TGraph v0.6                                                |                                                           
+ x-step: 0.250000                                           |                                                           
+ y-step: 0.250000                                           |                                                           
+ Equations:                                                 |                                                           
+ f(x) = cos(x)                                              |                                                           
+                                                            |                                                           
+                                                            |                                                           
+                                                            |                                                           
+                                                            |                                                           
+                                                            |                                                           
+        xxxx                     xxxx                     xxxxx                     xxxx                     xxxx       
+       x    xx                  x    xx                  x  |  x                  xx    x                  xx    x      
+     xx       x                x       x                x   |   x                x       x                x       xx    
+    x          x              x         x              x    |    x              x         x              x          x   
+---x------------x------------x-----------x------------x-----+-----x------------x-----------x------------x------------x--
+  x              x          x             x          x     O|      x          x             x          x              x 
+ x                x       xx               x        x       |       x        x               xx       x                x
+x                  xx    x                  xx    xx        |        xx    xx                  x    xx                  
+                     xxxx                     xxxx          |          xxxx                     xxxx                    
+                                                            |                                                           
+                                                            |                                                           
+                                                            |                                                           
+                                                            |                                                           
+                                                            |                                                           
+                                                            |                                                           
+                                                            |                                                           
+                                                            |                                                           
+                                                            |                                                           
+                                                            |                                                           

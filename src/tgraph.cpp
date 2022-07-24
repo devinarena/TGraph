@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <cmath>
+#include <fstream>
 #include <iostream>
 #include <stack>
 #include <vector>
@@ -26,14 +27,14 @@ TGraph::TGraph() {
 void TGraph::setupWindow() {
 // get the window size based on platform
 // windows
-#ifdef _WIN32 || _WIN64 || __CYGWIN__
+#ifdef TG_WINDOWS
   CONSOLE_SCREEN_BUFFER_INFO csbi;
   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
   screenWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
   screenHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 #endif
 // macOS and Linux
-#ifdef __linux__ || __unix__ || __unix || unix || __APPLE__ || __MACH__
+#ifdef TG_LINUX
   struct winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   screenWidth = w.ws_col;
@@ -95,29 +96,28 @@ void TGraph::computePoints(int equation) {
 /**
  * @brief Draws the graph to the screen.
  */
-void TGraph::draw() {
-  system("cls");
-  std::cout << std::endl;
+void TGraph::draw(std::ostream& stream) {
+  stream << std::endl;
   for (int j = 0; j < screenHeight; j++) {
     for (int i = 0; i < screenWidth; i++) {
       if (screen[j][i] != ' ') {
-        std::cout << screen[j][i];
+        stream << screen[j][i];
       } else {
         int x = i - screenWidth / 2;
         int y = screenHeight / 2 - j;
         if (x == 0 && y == 0)
-          std::cout << "+";
+          stream << "+";
         else if (x == -1 && y == -1)
-          std::cout << "O";
+          stream << "O";
         else if (x == 0)
-          std::cout << "|";
+          stream << "|";
         else if (y == 0)
-          std::cout << "-";
+          stream << "-";
         else
-          std::cout << " ";
+          stream << " ";
       }
     }
-    std::cout << "\n";
+    stream << "\n";
   }
 }
 
@@ -125,7 +125,12 @@ void TGraph::draw() {
  * @brief Re-renders the 2d screen array (for when zooming happens, etc.)
  */
 void TGraph::rerender() {
+#ifdef TG_WINDOWS
   system("cls");
+#endif
+#ifdef TG_LINUX
+  system("clear");
+#endif
   screen = std::vector(screenHeight, std::vector(screenWidth, ' '));
 
   writeToScreen("TGraph v" + std::to_string(VERSION_MAJOR) + "." +
@@ -139,7 +144,7 @@ void TGraph::rerender() {
     computePoints(i);
   }
 
-  draw();
+  draw(std::cout);
 }
 
 /**
@@ -289,13 +294,19 @@ void TGraph::parseInput(std::string input) {
   if (tokens.size() == 0)
     return;
   if (tokens[0].compare("help") == 0) {
+#ifdef TG_WINDOWS
     system("cls");
+#endif
+#ifdef TG_LINUX
+    system("clear");
+#endif
     std::cout << "TGraph v" << VERSION_MAJOR << "." << VERSION_MINOR
               << " by Devin Arena:\n";
     std::cout << "help - displays this help message menu\n";
     std::cout << "graph - re-renders the graph\n";
     std::cout << "clear - clears all equations\n";
     std::cout << "exit - exits the program\n";
+    std::cout << "save [file] - save the current output to a file\n";
     std::cout << "xstep [step_size, default=1] - sets the x step size\n";
     std::cout << "ystep [step_size, default=1] - sets the y step size\n";
     std::cout << "'+' - zoom in (xstep /= 2, ystep /= 2)\n";
@@ -339,10 +350,30 @@ void TGraph::parseInput(std::string input) {
     stepY *= 0.5;
     stepX *= 0.5;
     rerender();
+  } else if (tokens[0].compare("save") == 0) {
+    if (tokens.size() != 2) {
+      std::cout << "Invalid command syntax.\n";
+      return;
+    }
+    std::string filename = tokens[1];
+    std::ofstream outfile;
+    outfile.open(filename);
+    if (!outfile.is_open()) {
+      std::cout << "Error opening file.\n";
+      return;
+    }
+    draw(outfile);
+    outfile.close();
   } else {
     parseEquation(input);
     computePoints(ops.size() - 1);
-    draw();
+#ifdef TG_WINDOWS
+    system("cls");
+#endif
+#ifdef TG_LINUX
+    system("clear");
+#endif
+    draw(std::cout);
   }
 }
 

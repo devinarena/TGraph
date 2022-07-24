@@ -45,7 +45,8 @@
         "random": "cpp",
         "tuple": "cpp",
         "utility": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "fstream": "cpp"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

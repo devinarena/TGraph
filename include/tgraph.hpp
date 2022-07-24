@@ -15,10 +15,20 @@
 #include "./builtins.hpp"
 #include "parser.hpp"
 
-// version info
+// version infos
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 6
+
+// os info
+#if (defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__))
+#define TG_WINDOWS
+#endif
+
+#if (defined(__linux__) || defined(__unix__) || defined(__unix) || \
+     defined(unix) || defined(__APPLE__) || defined(__MACH__))
+#define TG_LINUX
+#endif
 
 // compiling with debug on prints out opcodes as the program runs
 
@@ -66,7 +76,7 @@ class TGraph {
   void setupWindow();
   void computePoints(int equation);
   void cli();
-  void draw();
+  void draw(std::ostream& stream);
   void rerender();
   void parseEquation(std::string& equation);
   double simulateEquation(double x, int equation);
