@@ -1,6 +1,6 @@
 # TGraph
 
-### A graphing simulator built for terminals.
+### A fast, lightweight graphing simulator built for terminals.
 
 ## About
 
