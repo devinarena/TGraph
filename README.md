@@ -28,9 +28,7 @@ To run TGraph, run the executable.
 .\bin\tgraph.exe
 ```
 
-<div align="center">
-  ![STARTUP](examples/image/startup.png)
-</div>
+![STARTUP](/examples/image/startup.png)
 
 or if you are on Linux,
 
@@ -60,9 +58,7 @@ TGraph supports some command line arguments. Normal commands may be entered as c
 .\bin\tgraph.exe "+" and "+" and "sin(x)" and "cos(x)"
 ```
 
-<div align="center">
-  ![SINE-COSINE](examples/image/sine_cosine.png)
-</div>
+![SINE-COSINE](examples/image/sine_cosine.png)
 
 ### Quadratic and Exponential
 
@@ -70,9 +66,7 @@ TGraph supports some command line arguments. Normal commands may be entered as c
 .\bin\tgraph.exe "+" and "+" and "+" and "x^2/5" and "e^x-5"
 ```
 
-<div align="center">
-  ![QUAD-EXPO](examples/image/parabola_exponential.png)
-</div>
+![QUAD-EXPO](examples/image/parabola_exponential.png)
 
 ### More Complex Expressions
 
@@ -80,9 +74,7 @@ TGraph supports some command line arguments. Normal commands may be entered as c
 .\bin\tgraph.exe "xstep 0.15" and "ystep 0.15" and "e ^ cos(x)" and "e ^ sin(x)" and "e ^ (cos(x) + sin(x))"
 ```
 
-<div align="center">
-  ![MORE-COMPLEX](examples/image/more_complex_expressions.png)
-</div>
+![MORE-COMPLEX](examples/image/more_complex_expressions.png)
 
 ## License and Contributions
 
