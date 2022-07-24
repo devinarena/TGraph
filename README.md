@@ -16,36 +16,46 @@ TGraph is a simple graphing simulator built for terminals. It implements in C++ 
 
 ## Installation
 
+### Build Requirements
+* GNU Make (optional)
+* Any C++ compiler (developed using GCC/Clang)
+
 TGraph can be compiled directly from the source code using make. Grab a copy and run make to get started.
 
 ```bash
 make
 ```
 
-To run TGraph, run the executable.
+If you do not wish to use make, you can also just compile normally.
 
 ```bash
-.\bin\tgraph.exe
+g++ -g -Wall src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp -o tgraph
 ```
 
-![STARTUP](/examples/image/startup.png)
-
-or if you are on Linux,
+To run TGraph, run the compiled executable.
 
 ```bash
 ./bin/tgraph
 ```
 
+![STARTUP](/examples/image/startup.png)
+
+or if you are on Windows,
+
+```batch
+.\bin\tgraph.exe
+```
+
 TGraph supports some command line arguments. Normal commands may be entered as command line arguments and they will be entered sequentially.
 
 ```bash
-.\bin\tgraph.exe "sin(x)"
+./bin/tgraph.exe "sin(x)"
 ```
 
 'and' designates a separator between commands.
 
 ```bash
-.\bin\tgraph.exe x - 2 and "cos(x)" and "save file.txt" and "exit"
+./bin/tgraph.exe x - 2 and "cos(x)" and "save file.txt" and "exit"
 ```
 
 ### \*Quotations are only necessary if the mathematical symbol has functionality in the terminal.
@@ -54,7 +64,7 @@ TGraph supports some command line arguments. Normal commands may be entered as c
 
 ### Sine and Cosine
 
-```bash
+```batch
 .\bin\tgraph.exe "+" and "+" and "sin(x)" and "cos(x)"
 ```
 
@@ -63,7 +73,7 @@ TGraph supports some command line arguments. Normal commands may be entered as c
 ### Quadratic and Exponential
 
 ```bash
-.\bin\tgraph.exe "+" and "+" and "+" and "x^2/5" and "e^x-5"
+./bin/tgraph.exe "+" and "+" and "+" and "x^2/5" and "e^x-5"
 ```
 
 ![QUAD-EXPO](examples/image/parabola_exponential.png)
@@ -71,7 +81,7 @@ TGraph supports some command line arguments. Normal commands may be entered as c
 ### More Complex Expressions
 
 ```bash
-.\bin\tgraph.exe "xstep 0.15" and "ystep 0.15" and "e ^ cos(x)" and "e ^ sin(x)" and "e ^ (cos(x) + sin(x))"
+./bin/tgraph.exe "xstep 0.15" and "ystep 0.15" and "e ^ cos(x)" and "e ^ sin(x)" and "e ^ (cos(x) + sin(x))"
 ```
 
 ![MORE-COMPLEX](examples/image/more_complex_expressions.png)
@@ -81,7 +91,3 @@ TGraph supports some command line arguments. Normal commands may be entered as c
 TGraph is licensed under the MIT license. You are free to use, modify, and redistribute TGraph as you see fit.
 
 TGraph is open-source and welcomes community contributions if you see a bug or wish to implement a feature.
-
-```
-
-```
