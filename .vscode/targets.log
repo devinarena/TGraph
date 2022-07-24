@@ -1,6 +1,5 @@
 make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # GNU Make 4.3
- 
 # Built for x86_64-pc-msys
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
@@ -8,7 +7,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Sat Jul 23 00:56:11 2022
+# Make data base, printed on Sat Jul 23 23:59:51 2022
 
 # Variables
 
@@ -42,12 +41,13 @@ PROCESSOR_LEVEL = 23
 PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
 # default
 MAKE_COMMAND := make
+ 
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # makefile (from 'makefile', line 4)
 OBJ_DIR := obj
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_18956_ZOABLPPOUDEESHNL
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_21200_COHELBGKXWOGWXCP
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -77,7 +77,7 @@ ONEDRIVE = C:\Users\devin\OneDrive
 # makefile
 CURDIR := /c/Users/devin/Documents/GitHub/TGraph
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
@@ -97,7 +97,7 @@ MAKEFILE_LIST := makefile
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 18956
+VSCODE_PID = 21200
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # automatic
@@ -215,7 +215,8 @@ CC = g++
 # environment
 PROCESSOR_IDENTIFIER = AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
 # variable set hash-table stats:
-# Load=101/1024=10%, Rehash=0, Collisions=15/138=11%
+ 
+# Load=101/1024=10%, Rehash=0, Collisions=15/143=10%
 
 # Pattern-specific Variable Values
 
@@ -224,9 +225,9 @@ PROCESSOR_IDENTIFIER = AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
 # Directories
 
 # src (device 3396416053, inode 9007199255880738): 6 files, no impossibilities.
-# . (device 3396416053, inode 3377699722313167): 11 files, no impossibilities.
+# . (device 3396416053, inode 3377699722313167): 16 files, no impossibilities.
 
-# 17 files, no impossibilities in 2 directories.
+# 22 files, no impossibilities in 2 directories.
 
 # Implicit Rules
 
@@ -237,7 +238,7 @@ PROCESSOR_IDENTIFIER = AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
 # Not a target:
 src/main.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-21 22:54:27.4922736
+#  Last modified 2022-07-23 19:29:26.9662937
 #  File has been updated.
 #  Successfully updated.
 
@@ -261,25 +262,27 @@ all: bin/tgraph
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has been updated.
-#  Successfully updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/5=0%
 
 # Not a target:
 src/parser.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-21 23:46:24.0623531
+#  Last modified 2022-07-23 14:34:31.0265565
 #  File has been updated.
 #  Successfully updated.
 
 # Not a target:
 src/tgraph.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-21 23:39:11.299751
+#  Last modified 2022-07-23 21:15:41.8096547
 #  File has been updated.
 #  Successfully updated.
 
 bin:
 #  Implicit rule search has not been done.
-#  Last modified 2022-07-21 23:46:31.3545524
+#  Last modified 2022-07-23 21:09:35.3881197
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'makefile', line 22):
@@ -295,37 +298,63 @@ makefile:
 # Not a target:
 src/scanner.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-21 23:28:00.990469
+#  Last modified 2022-07-23 14:21:50.4959573
 #  File has been updated.
 #  Successfully updated.
 
 bin/tgraph: src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp | bin
 #  Implicit rule search has not been done.
-#  Last modified 2022-07-21 23:46:31.477664
+#  Implicit/static pattern stem: ''
+#  Last modified 2022-07-23 21:09:35.5092291
 #  File has been updated.
-#  Successfully updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := bin/tgraph
+# automatic
+# * := 
+# automatic
+# < := src/main.cpp
+# automatic
+# + := src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp
+# automatic
+# % := 
+# automatic
+# ^ := src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp
+# automatic
+# ? := src/tgraph.cpp
+# automatic
+# | := bin
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=2/15=13%
 #  recipe to execute (from 'makefile', line 19):
 	$(CC) $(CXXFLAGS) $^ -o $@
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 .PHONY: all clean
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 
+ 
 # files hash-table stats:
-# Load=12/1024=1%, Rehash=0, Collisions=0/34=0%
+# Load=12/1024=1%, Rehash=0, Collisions=0/35=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 26 / storage = 233 B / avg = 8 B
-# current buf: size = 8162 B / used = 233 B / count = 26 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 31 / storage = 279 B / avg = 9 B
+# current buf: size = 8162 B / used = 279 B / count = 31 / avg = 9 B
 
-# strcache performance: lookups = 44 / hit rate = 40%
+# strcache performance: lookups = 50 / hit rate = 38%
 # hash-table stats:
-# Load=26/8192=0%, Rehash=0, Collisions=0/44=0%
-# Finished Make data base on Sat Jul 23 00:56:11 2022
+# Load=31/8192=0%, Rehash=0, Collisions=0/50=0%
+# Finished Make data base on Sat Jul 23 23:59:51 2022
 
  
