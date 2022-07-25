@@ -13,7 +13,6 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
-#include <stack>
 #include <vector>
 
 TGraph::TGraph() {
@@ -84,10 +83,14 @@ void TGraph::cli() {
 void TGraph::computePoints(int equation) {
   char symbol = 'a' + (23 + equation) % 26;
   for (int i = 0; i < screenWidth; i++) {
+    // corrected x for matrix
     double x = (i - screenWidth / 2) * stepX;
-    int y = round(screenHeight / 2 - simulateEquation(x, equation) / stepY);
-    if (y > 0 && y < screenHeight) {
-      screen[y][i] = symbol;
+    for (double& yv : simulateEquation(x, equation)) {
+      // corrected y for matrix
+      int y = round(screenHeight / 2 - yv / stepY);
+      if (y > 0 && y < screenHeight) {
+        screen[y][i] = symbol;
+      }
     }
   }
   writeToScreen("f(x) = " + equations[equation], 1, 5 + equation);
@@ -168,7 +171,7 @@ void TGraph::parseEquation(std::string& equation) {
  * @param equation int the index of the equation to simulate.
  * @return double The y value of the equation at x.
  */
-double TGraph::simulateEquation(double x, int equation) {
+std::vector<double> TGraph::simulateEquation(double x, int equation) {
 #undef CONST
   std::stack<double> nums;
   int start = 0;
@@ -233,6 +236,11 @@ double TGraph::simulateEquation(double x, int equation) {
         nums.push(std::pow(b, a));
         break;
       }
+      case OP::PLUS_OR_MINUS: {
+        double num = nums.top();
+        nums.push(-num);
+        break;
+      }
       case OP::MAGIC: {
         double a = nums.top();
         nums.pop();
@@ -265,7 +273,7 @@ double TGraph::simulateEquation(double x, int equation) {
     std::cout << "\n";
 #endif
   }
-  return nums.top();
+  return std::vector<double>(&nums.top() + 1 - nums.size(), &nums.top() + 1);
 #define CONST const
 }
 

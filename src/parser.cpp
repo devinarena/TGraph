@@ -32,6 +32,8 @@ Parser::Parser() : tindex(0) {
       (ParseRule){.infix = &binary, .precedence = Precedence::FACTOR};
   parseRules[+TType::POW] =
       (ParseRule){.infix = &binary, .precedence = Precedence::POWER};
+  parseRules[+TType::P_O_M] =
+      (ParseRule){.prefix = &unary, .precedence = Precedence::UNARY};
   parseRules[+TType::MAGIC] =
       (ParseRule){.prefix = &unary, .precedence = Precedence::UNARY};
   parseRules[+TType::FUNC] =
@@ -140,6 +142,9 @@ void Parser::unary() {
   parsePrecedence(Precedence::UNARY);
 
   switch (op.type) {
+    case TType::P_O_M:
+      ops.push_back(OPCODE(OP::PLUS_OR_MINUS));
+      break;
     case TType::SUB:
       ops.push_back(OPCODE(OP::NEG));
       break;
@@ -197,7 +202,7 @@ void Parser::parsePrecedence(Precedence precedence) {
 
 /**
  * @brief Parses a list of tokens, returning a list of opcodes.
- * 
+ *
  * @param tokens std::vector<Token>& of tokens to parse.
  * @return std::vector<Operand> the parsed opcodes.
  */
@@ -211,7 +216,7 @@ std::vector<Operand> Parser::parse(std::vector<Token>& tokens) {
 
 /**
  * @brief Debug function to print the opcodes.
- * 
+ *
  * @param ops std::vector<Operand>& the opcodes to print.
  */
 void Parser::printOPs(std::vector<Operand>& ops) {
@@ -222,7 +227,7 @@ void Parser::printOPs(std::vector<Operand>& ops) {
 
 /**
  * @brief Debug function to print an opcode.
- * 
+ *
  * @param ops std::vector<Operand>& the opcodes to print.
  * @param idx size_t the index of the opcode to print.
  * @return int the index of the next opcode.
@@ -256,6 +261,10 @@ int Parser::printOP(std::vector<Operand>& ops, int idx) {
     }
     case OP::POW: {
       std::cout << "POW\n";
+      return idx + 1;
+    }
+    case OP::PLUS_OR_MINUS: {
+      std::cout << "PLUS_OR_MINUS\n";
       return idx + 1;
     }
     case OP::MAGIC: {

@@ -35,6 +35,12 @@ std::vector<Token> Scanner::scan(std::string& equation) {
         continue;
       }
       case '+': {
+        if (i + 2 < equation.length() && equation[i + 1] == '/' &&
+            equation[i + 2] == '-') {
+          tokens.push_back(TOKEN(TType::P_O_M));
+          i += 2;
+          continue;
+        }
         tokens.push_back(TOKEN(TType::ADD));
         continue;
       }

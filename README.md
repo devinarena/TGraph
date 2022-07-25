@@ -22,6 +22,10 @@ TGraph can be compiled directly from the source code using make. Grab a copy and
 make
 ```
 
+x^2+y^2=1
+y^2=1-x^2
+y=+=sqrt(1-x^2)
+
 To run TGraph, run the executable.
 
 ```bash
@@ -38,7 +42,7 @@ or if you are on Linux,
 ./bin/tgraph
 ```
 
-TGraph supports some command line arguments. Normal commands may be entered as command line arguments and they will be entered sequentially.
+TGraph supports some command line arguments. Normal commands may be entered as command line arguments and they will be parsed sequentially.
 
 ```bash
 .\bin\tgraph.exe "sin(x)"

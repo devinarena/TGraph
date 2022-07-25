@@ -30,6 +30,7 @@ enum class TType {
   MUL, // *
   DIV, // /
   POW, // ^
+  P_O_M,
   MAGIC, // ~
   O_PAREN, // (
   C_PAREN, // )
