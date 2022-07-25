@@ -1,6 +1,6 @@
 # TGraph
 
-### A graphing simulator built for terminals.
+### A fast, lightweight graphing simulator built for terminals.
 
 ## About
 
@@ -16,42 +16,46 @@ TGraph is a simple graphing simulator built for terminals. It implements in C++ 
 
 ## Installation
 
+### Build Requirements
+* GNU Make (optional)
+* Any C++ compiler (developed using GCC/Clang)
+
 TGraph can be compiled directly from the source code using make. Grab a copy and run make to get started.
 
 ```bash
 make
 ```
 
-x^2+y^2=1
-y^2=1-x^2
-y=+=sqrt(1-x^2)
-
-To run TGraph, run the executable.
+If you do not wish to use make, you can also just compile normally.
 
 ```bash
-.\bin\tgraph.exe
+g++ -g -Wall src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp -o tgraph
 ```
 
-<div align="center">
-  ![STARTUP](examples/image/startup.png)
-</div>
-
-or if you are on Linux,
+To run TGraph, run the compiled executable.
 
 ```bash
 ./bin/tgraph
 ```
 
-TGraph supports some command line arguments. Normal commands may be entered as command line arguments and they will be parsed sequentially.
+![STARTUP](/examples/image/startup.png)
+
+or if you are on Windows,
+
+```batch
+.\bin\tgraph.exe
+```
+
+TGraph supports some command line arguments. Normal commands may be entered as command line arguments and they will be entered sequentially.
 
 ```bash
-.\bin\tgraph.exe "sin(x)"
+./bin/tgraph "sin(x)"
 ```
 
 'and' designates a separator between commands.
 
 ```bash
-.\bin\tgraph.exe x - 2 and "cos(x)" and "save file.txt" and "exit"
+./bin/tgraph x - 2 and "cos(x)" and "save file.txt" and "exit"
 ```
 
 ### \*Quotations are only necessary if the mathematical symbol has functionality in the terminal.
@@ -60,40 +64,30 @@ TGraph supports some command line arguments. Normal commands may be entered as c
 
 ### Sine and Cosine
 
-```bash
+```batch
 .\bin\tgraph.exe "+" and "+" and "sin(x)" and "cos(x)"
 ```
 
-<div align="center">
-  ![SINE-COSINE](examples/image/sine_cosine.png)
-</div>
+![SINE-COSINE](examples/image/sine_cosine.png)
 
 ### Quadratic and Exponential
 
 ```bash
-.\bin\tgraph.exe "+" and "+" and "+" and "x^2/5" and "e^x-5"
+./bin/tgraph "+" and "+" and "+" and "x^2/5" and "e^x-5"
 ```
 
-<div align="center">
-  ![QUAD-EXPO](examples/image/parabola_exponential.png)
-</div>
+![QUAD-EXPO](examples/image/parabola_exponential.png)
 
 ### More Complex Expressions
 
 ```bash
-.\bin\tgraph.exe "xstep 0.15" and "ystep 0.15" and "e ^ cos(x)" and "e ^ sin(x)" and "e ^ (cos(x) + sin(x))"
+./bin/tgraph "xstep 0.15" and "ystep 0.15" and "e ^ cos(x)" and "e ^ sin(x)" and "e ^ (cos(x) + sin(x))"
 ```
 
-<div align="center">
-  ![MORE-COMPLEX](examples/image/more_complex_expressions.png)
-</div>
+![MORE-COMPLEX](examples/image/more_complex_expressions.png)
 
 ## License and Contributions
 
 TGraph is licensed under the MIT license. You are free to use, modify, and redistribute TGraph as you see fit.
 
 TGraph is open-source and welcomes community contributions if you see a bug or wish to implement a feature.
-
-```
-
-```
