@@ -122,8 +122,12 @@ std::vector<Token> Scanner::scan(std::string& equation) {
         tokens.push_back(TOKEN(TType::FUNC));
         tokens.push_back(FNPTR_TOKEN(fn));
       } else {
+        double constant = resolveConstant(name);
+        if (constant == 0) {
+          std::cerr << "Not a defined function or constant!\n";
+        }
         tokens.push_back(TOKEN(TType::CONST));
-        tokens.push_back(VALUE_TOKEN(resolveConstant(name)));
+        tokens.push_back(VALUE_TOKEN(constant));
       }
       i = p - 1;
     }

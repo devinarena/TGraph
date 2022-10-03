@@ -79,7 +79,7 @@ void Parser::expression() {
 void Parser::grouping() {
   expression();
   if (currentToken().type != TType::C_PAREN) {
-    throw std::runtime_error("Expected closing parenthesis.");
+    std::cerr << "Expected closing parenthesis.";
   }
   tindex++;
 }
@@ -90,12 +90,12 @@ void Parser::grouping() {
 void Parser::func() {
   Token funptr = currentToken();
   if (!funptr.fnptr) {
-    throw std::runtime_error("Unexpected function call.");
+    std::cerr << "Unexpected function call.";
   }
   tindex += 2;  // skip this token and the opening parenthesis
   expression();
   if (currentToken().type != TType::C_PAREN) {
-    throw std::runtime_error("Expected closing parenthesis.");
+    std::cerr << "Expected closing parenthesis.";
     return;
   }
   tindex++;

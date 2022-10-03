@@ -7,13 +7,12 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Sun Jul 24 13:55:11 2022
+# Make data base, printed on Fri Sep 30 15:29:38 2022
 
 # Variables
 
 # environment
 FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
- 
 # environment
 SYSTEMDRIVE = C:
 # environment
@@ -47,7 +46,7 @@ MAKE_COMMAND := make
 # makefile (from 'makefile', line 4)
 OBJ_DIR := obj
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_18276_EMOUVYUYZWDWWXKL
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_3640_GCPMZDUWTSCOMBWF
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -61,7 +60,7 @@ VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = C:\Users\devin\AppData\Roaming\Code\CachedData\3b889b090b5ad5793f524b5d1d39fda662b96a2a
+VSCODE_CODE_CACHE_PATH = C:\Users\devin\AppData\Roaming\Code\CachedData\74b1f979648cc44d385a2286793c226e611f59e7
 # environment
 LANG = C
 # default
@@ -97,7 +96,7 @@ MAKEFILE_LIST := makefile
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 18276
+VSCODE_PID = 3640
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # automatic
@@ -108,6 +107,8 @@ VSCODE_PID = 18276
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # default
 MAKE_HOST := x86_64-pc-msys
+# environment
+ANDROID_HOME = C:\Users\devin\AppData\Local\Android\Sdk
 # environment
 PROGRAMDATA = C:\ProgramData
 # default
@@ -127,12 +128,13 @@ MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = /c/Program Files (x86)/Common Files/Oracle/Java/javapath:/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/c/Windows/system32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0:/c/Windows/System32/OpenSSH:/c/Program Files/Git/cmd:/c/Users/devin/AppData/Local/Programs/Python/Python310:/c/Users/devin/AppData/Local/Programs/Python/Python310/Scripts:/c/Program Files/nodejs:/c/Program Files (x86)/Pulse Secure/VC142.CRT/X64:/c/Program Files (x86)/Pulse Secure/VC142.CRT/X86:/c/Program Files/PuTTY:/c/Program Files/Vim/vim82:/c/Users/devin/AppData/Roaming/npm:/c/Program Files/WireGuard:/c/Program Files/dotnet:/mingw64/bin:/usr/bin:/c/Program Files/Java/jdk-17.0.2/bin:/c/Users/devin/AppData/Local/Microsoft/WindowsApps:/c/Users/devin/AppData/Local/Programs/Microsoft VS Code/bin:/c/Users/devin/.ebcli-virtual-env/executables:/c/Users/devin/.dotnet/tools
+PATH = /c/Program Files/Java/jdk-17.0.2/bin:/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/c/Windows/system32:/c/Windows:/c/Windows/System32/Wbem:/c/Windows/System32/WindowsPowerShell/v1.0:/c/Windows/System32/OpenSSH:/c/Program Files/Git/cmd:/c/Users/devin/AppData/Local/Programs/Python/Python310:/c/Users/devin/AppData/Local/Programs/Python/Python310/Scripts:/c/Program Files/nodejs:/c/Program Files (x86)/Pulse Secure/VC142.CRT/X64:/c/Program Files (x86)/Pulse Secure/VC142.CRT/X86:/c/Program Files/PuTTY:/c/Program Files/Vim/vim82:/c/Users/devin/AppData/Roaming/npm:/c/Program Files/WireGuard:/c/Program Files/dotnet:/mingw64/bin:/usr/bin:/c/Users/devin/AppData/Local/Android/Sdk:/c/Users/devin/AppData/Local/Android/Sdk/platform-tools:/c/Users/devin/AppData/Local/Microsoft/WindowsApps:/c/Users/devin/.ebcli-virtual-env/executables:/c/Users/devin/.dotnet/tools:/c/Users/devin/AppData/Local/Programs/Microsoft VS Code/bin:/c/Users/devin/AppData/Local/Programs/MiKTeX/miktex/bin/x64
 # environment
 COMPUTERNAME = DESKTOP-54SJFHM
 # default
 MAKEFILES := 
 # automatic
+ 
 ^F = $(notdir $^)
 # environment
 PROMPT = $P$G
@@ -191,7 +193,7 @@ ELECTRON_RUN_AS_NODE = 1
 # environment
 TEMP = /c/Users/devin/AppData/Local/Temp
 # environment
-VSCODE_IPC_HOOK = \\.\pipe\af5c08bea7212bfbef982b77adbd9c5d-1.69.2-main-sock
+VSCODE_IPC_HOOK = \\.\pipe\af5c08bea7212bfbef982b77adbd9c5d-1.71.2-main-sock
 # environment
 TERM = xterm-256color
 # default
@@ -204,7 +206,6 @@ SUFFIXES :=
 ALLUSERSPROFILE = C:\ProgramData
 # environment
 SESSIONNAME = Console
- 
 # makefile (from 'makefile', line 12)
 CXXFLAGS = -g -Wall
 # default
@@ -216,7 +217,7 @@ CC = g++
 # environment
 PROCESSOR_IDENTIFIER = AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
 # variable set hash-table stats:
-# Load=101/1024=10%, Rehash=0, Collisions=15/141=11%
+# Load=102/1024=10%, Rehash=0, Collisions=15/144=10%
 
 # Pattern-specific Variable Values
 
@@ -225,9 +226,9 @@ PROCESSOR_IDENTIFIER = AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
 # Directories
 
 # src (device 3396416053, inode 9007199255880738): 6 files, no impossibilities.
-# . (device 3396416053, inode 3377699722313167): 12 files, no impossibilities.
+# . (device 3396416053, inode 3377699722313167): 14 files, no impossibilities.
 
-# 18 files, no impossibilities in 2 directories.
+# 20 files, no impossibilities in 2 directories.
 
 # Implicit Rules
 
@@ -238,7 +239,7 @@ PROCESSOR_IDENTIFIER = AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
 # Not a target:
 src/main.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-23 19:29:26.9662937
+#  Last modified 2022-09-30 14:49:40.1977518
 #  File has been updated.
 #  Successfully updated.
 
@@ -264,46 +265,27 @@ all: bin/tgraph
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/3=0%
+# Load=0/32=0%, Rehash=0, Collisions=0/5=0%
 
 # Not a target:
 src/parser.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-23 14:34:31.0265565
+#  Last modified 2022-07-24 14:18:09.0131111
 #  File has been updated.
 #  Successfully updated.
 
 # Not a target:
 src/tgraph.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-23 21:15:41.8096547
+#  Last modified 2022-07-24 14:23:09.2807851
 #  File has been updated.
 #  Successfully updated.
 
 bin:
 #  Implicit rule search has not been done.
-#  Implicit/static pattern stem: ''
-#  File does not exist.
+#  Last modified 2022-09-30 14:14:07.0345897
 #  File has been updated.
-#  Needs to be updated (-q is set).
-# automatic
-# @ := bin
-# automatic
-# * := 
-# automatic
-# < := 
-# automatic
-# + := 
-# automatic
-# % := 
-# automatic
-# ^ := 
-# automatic
-# ? := 
-# automatic
-# | := 
-# variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=1/12=8%
+#  Successfully updated.
 #  recipe to execute (from 'makefile', line 22):
 	mkdir -p $@
 
@@ -317,17 +299,34 @@ makefile:
 # Not a target:
 src/scanner.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-23 14:21:50.4959573
+#  Last modified 2022-07-24 14:08:22.3065788
 #  File has been updated.
 #  Successfully updated.
 
 bin/tgraph: src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp | bin
 #  Implicit rule search has not been done.
-#  File does not exist.
+#  Implicit/static pattern stem: ''
+#  Last modified 2022-09-30 14:14:07.2139674
 #  File has been updated.
 #  Needs to be updated (-q is set).
+# automatic
+# @ := bin/tgraph
+# automatic
+# * := 
+# automatic
+# < := src/main.cpp
+# automatic
+# + := src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp
+# automatic
+# % := 
+# automatic
+# ^ := src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp
+# automatic
+# ? := src/main.cpp
+# automatic
+# | := bin
 # variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/3=0%
+# Load=8/32=25%, Rehash=0, Collisions=2/15=13%
 #  recipe to execute (from 'makefile', line 19):
 	$(CC) $(CXXFLAGS) $^ -o $@
 
@@ -346,17 +345,16 @@ bin/tgraph: src/main.cpp src/parser.cpp src/scanner.cpp src/tgraph.cpp | bin
 # Load=12/1024=1%, Rehash=0, Collisions=0/35=0%
 # VPATH Search Paths
 
- 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 28 / storage = 253 B / avg = 9 B
-# current buf: size = 8162 B / used = 253 B / count = 28 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 29 / storage = 261 B / avg = 9 B
+# current buf: size = 8162 B / used = 261 B / count = 29 / avg = 9 B
 
-# strcache performance: lookups = 46 / hit rate = 39%
+# strcache performance: lookups = 48 / hit rate = 39%
 # hash-table stats:
-# Load=28/8192=0%, Rehash=0, Collisions=0/46=0%
-# Finished Make data base on Sun Jul 24 13:55:11 2022
+# Load=29/8192=0%, Rehash=0, Collisions=0/48=0%
+# Finished Make data base on Fri Sep 30 15:29:38 2022
 
  
